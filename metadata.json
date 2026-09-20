@@ -1,0 +1,6 @@
+{
+  "name": "Recanto 7 - Cafeteria Artesanal",
+  "description": "Landing page acolhedora da cafeteria Recanto 7 no Maiobão, Paço do Lumiar. Cafés especiais, receitas frescas e ambiente acolhedor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

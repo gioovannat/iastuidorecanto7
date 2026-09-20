@@ -1,0 +1,102 @@
+{
+  "version": "1.2.0",
+  "lastUpdated": "2026-09-20T13:00:00.000Z",
+  "brand": {
+    "name": "Recanto 7",
+    "tagline": "Cafeteria & Companhia",
+    "subtagline": "Café e Cia",
+    "description": "Seu refúgio diário para saborear cafés especiais e delícias artesanais preparadas com afeto. Um ambiente calmo e acolhedor no Maiobão para desacelerar, conversar e apreciar os melhores momentos da vida.",
+    "whatsapp": "5598985353197",
+    "whatsappFormatted": "(98) 98535-3197",
+    "whatsappMessage": "Olá! Gostaria de saber mais sobre a cafeteria e as delícias do dia.",
+    "instagram": "@recanto_7cafeteria",
+    "instagramUrl": "https://www.instagram.com/recanto_7cafeteria",
+    "mapsUrl": "https://maps.google.com/?q=Recanto+7+Cafeteria+Maiobao+Paco+do+Lumiar",
+    "address": "Bairro Maiobão",
+    "neighborhood": "Maiobão",
+    "cityState": "Paço do Lumiar - MA"
+  },
+  "logo": {
+    "src": "/src/assets/images/recanto_7_logo_1789933091731.jpg",
+    "alt": "Logo Recanto 7 Café e Cia"
+  },
+  "fachada": {
+    "src": "/src/assets/images/fachada_amarela_1789934046294.jpg",
+    "caption": "Procure a fachada amarela",
+    "badgeText": "Fachada do Recanto 7"
+  },
+  "gallery": [
+    {
+      "id": "item-1",
+      "title": "Cappuccino & Latte Art Afetivo",
+      "type": "image",
+      "category": "cafes",
+      "categoryLabel": "Cafés Especiais",
+      "description": "Extração cremosa com leite vaporizado na temperatura perfeita e grãos de torra equilibrada.",
+      "src": "/src/assets/images/recanto_hero_cafe_1789933102401.jpg",
+      "tag": "Mais Pedido"
+    },
+    {
+      "id": "item-2",
+      "title": "Fornadas Artesanais do Dia",
+      "type": "image",
+      "category": "receitas",
+      "categoryLabel": "Receitas Frescas",
+      "description": "Croissants folhados crocantes e quitutes dourados preparados frescos diariamente pela manhã.",
+      "src": "/src/assets/images/recanto_pastries_1789933523946.jpg",
+      "tag": "Produção Diária"
+    },
+    {
+      "id": "item-3",
+      "title": "Métodos Especiais & Filtrados",
+      "type": "image",
+      "category": "cafes",
+      "categoryLabel": "Cafés Especiais",
+      "description": "Cafés filtrados em métodos artesanais para realçar notas aromáticas florais, frutadas e achocolatadas.",
+      "src": "/src/assets/images/recanto_pourover_1789933538581.jpg",
+      "tag": "Moído na Hora"
+    },
+    {
+      "id": "item-4",
+      "title": "Espaço Convidativo & Acolhedor",
+      "type": "image",
+      "category": "espaco",
+      "categoryLabel": "Nosso Espaço",
+      "description": "Cantinhos pensados para quem quer ler um livro, trabalhar com calma ou conversar entre amigos no Maiobão.",
+      "src": "/src/assets/images/recanto_interior_1789933549590.jpg",
+      "tag": "Ambiente Climatizado"
+    },
+    {
+      "id": "item-5",
+      "title": "Bolos & Tortas da Estação",
+      "type": "image",
+      "category": "receitas",
+      "categoryLabel": "Receitas Frescas",
+      "description": "Fatias generosas de bolos caseiros, variando a cada dia conforme a produção afetiva.",
+      "src": "/src/assets/images/recanto_cakes_1789933561227.jpg",
+      "tag": "Receita Afetiva"
+    },
+    {
+      "id": "item-6",
+      "title": "Fachada Amarela do Recanto",
+      "type": "image",
+      "category": "espaco",
+      "categoryLabel": "Nosso Espaço",
+      "description": "Procure a fachada amarela no Maiobão! Nosso refúgio aconchegante com toldo listrado e ambiente acolhedor.",
+      "src": "/src/assets/images/fachada_amarela_1789934046294.jpg",
+      "tag": "Procure a Fachada Amarela"
+    },
+    {
+      "id": "item-7",
+      "title": "Momento Café & Aconchego",
+      "type": "video",
+      "category": "espaco",
+      "categoryLabel": "Nosso Espaço",
+      "description": "Um vislumbre em vídeo da experiência, do aroma de café recém-moído e do ambiente acolhedor do Recanto 7.",
+      "src": "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80",
+      "videoUrl": "https://www.youtube.com/embed/a6n3j28kK_8",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
+      "tag": "Vídeo do Local"
+    }
+  ]
+}
