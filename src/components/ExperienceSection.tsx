@@ -6,10 +6,10 @@ export const ExperienceSection: React.FC = () => {
   const cards = [
     {
       icon: Coffee,
-      title: 'Grãos Selecionados',
+      title: 'Cafés Especiais',
       description:
         'Grãos selecionados e métodos de extração pensados para extrair as notas mais puras e marcantes de cada café.',
-      tag: 'Moído na hora',
+      tag: 'Grãos selecionados',
       accentColor: 'from-[#F7D070]/20 to-[#E8DFD5]/40',
       badgeColor: 'bg-[#FAF6F0] text-[#8C6249] border-[#E3D3C2]',
     },

@@ -26,6 +26,7 @@ import {
   X,
   ExternalLink,
   Copy,
+  Link2,
 } from 'lucide-react';
 import {
   SiteConfig,
@@ -65,6 +66,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // Gallery item edit/create modal state
   const [editingItem, setEditingItem] = useState<GalleryMediaItem | null>(null);
   const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
+  const [mediaFormError, setMediaFormError] = useState<string>('');
+
+  // Delete card modal state
+  const [itemToDelete, setItemToDelete] = useState<GalleryMediaItem | null>(null);
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
+  const [importSuccessMsg, setImportSuccessMsg] = useState('');
 
   // Credentials state
   const [creds, setCreds] = useState<AdminCredentials>(getAdminCredentials());
@@ -163,32 +170,40 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   const handleDeleteMedia = (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir esta mídia da galeria?')) {
-      const updatedGallery = siteState.gallery.filter((i) => i.id !== id);
-      const updated = { ...siteState, gallery: updatedGallery };
-      setSiteState(updated);
-      saveStoredSiteConfig(updated);
-      onUpdateConfig(updated);
-      triggerSaveNotification();
+    const item = siteState.gallery.find((i) => i.id === id);
+    if (item) {
+      setItemToDelete(item);
     }
+  };
+
+  const confirmDeleteMedia = (id: string) => {
+    const updatedGallery = siteState.gallery.filter((i) => i.id !== id);
+    const updated = { ...siteState, gallery: updatedGallery };
+    setSiteState(updated);
+    saveStoredSiteConfig(updated);
+    onUpdateConfig(updated);
+    setItemToDelete(null);
+    triggerSaveNotification();
   };
 
   const handleSaveMediaItem = (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingItem) return;
 
+    setMediaFormError('');
+
     if (!editingItem.title.trim()) {
-      alert('Por favor, informe o título da foto ou vídeo.');
+      setMediaFormError('Por favor, informe o título da foto ou vídeo.');
       return;
     }
 
     if (editingItem.type === 'image' && !editingItem.src) {
-      alert('Por favor, adicione uma foto ou link de imagem.');
+      setMediaFormError('Por favor, adicione uma foto ou link de imagem.');
       return;
     }
 
     if (editingItem.type === 'video' && !editingItem.videoUrl && !editingItem.src) {
-      alert('Por favor, adicione o link do vídeo (YouTube ou MP4).');
+      setMediaFormError('Por favor, adicione o link do vídeo (YouTube ou MP4).');
       return;
     }
 
@@ -233,6 +248,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     onUpdateConfig(updated);
     setIsMediaModalOpen(false);
     setEditingItem(null);
+    setMediaFormError('');
     triggerSaveNotification();
   };
 
@@ -241,6 +257,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
      ------------------------------------------------------------- */
   const handleExportGitHub = () => {
     downloadConfigForGitHub(siteState, 'recanto-site-content.json');
+  };
+
+  const [copiedAdminLink, setCopiedAdminLink] = useState(false);
+  const adminSecretUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}${window.location.pathname}#admin`
+      : '/#admin';
+
+  const handleCopyAdminLink = async () => {
+    try {
+      await navigator.clipboard.writeText(adminSecretUrl);
+      setCopiedAdminLink(true);
+      setTimeout(() => setCopiedAdminLink(false), 2500);
+    } catch {
+      setCopiedAdminLink(true);
+      setTimeout(() => setCopiedAdminLink(false), 2500);
+    }
   };
 
   const handleCopyJson = () => {
@@ -252,6 +285,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const handleImportJson = () => {
     setImportError('');
+    setImportSuccessMsg('');
     if (!importJsonText.trim()) {
       setImportError('Cole o código JSON do seu arquivo.');
       return;
@@ -262,23 +296,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       onUpdateConfig(res.config);
       triggerSaveNotification();
       setImportJsonText('');
-      alert('Configuração importada com sucesso do arquivo!');
+      setImportSuccessMsg('Configuração importada e salva com sucesso do arquivo!');
+      setTimeout(() => setImportSuccessMsg(''), 4000);
     } else {
       setImportError(res.error || 'Erro ao importar arquivo JSON.');
     }
   };
 
   const handleResetFactory = () => {
-    if (
-      window.confirm(
-        'Tem certeza que deseja restaurar as configurações originais de fábrica? Todas as fotos e textos personalizados voltarão ao padrão inicial.'
-      )
-    ) {
-      const reset = resetStoredSiteConfig();
-      setSiteState(reset);
-      onUpdateConfig(reset);
-      triggerSaveNotification();
-    }
+    setIsResetConfirmOpen(true);
+  };
+
+  const confirmResetFactory = () => {
+    const reset = resetStoredSiteConfig();
+    setSiteState(reset);
+    onUpdateConfig(reset);
+    triggerSaveNotification();
+    setIsResetConfirmOpen(false);
   };
 
   /* -------------------------------------------------------------
@@ -333,11 +367,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       <header className="bg-[#FAF6F0] border-b border-[#DECFC0] sticky top-0 z-30 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl overflow-hidden border border-[#DECFC0] bg-white shadow-2xs">
+            <div className="w-11 h-11 rounded-2xl overflow-hidden border border-[#DECFC0] bg-white shadow-2xs flex items-center justify-center p-1 shrink-0">
               <img
                 src={siteState.logo.src}
                 alt="Logo da Cafeteria"
-                className="w-full h-full object-cover"
+                className="max-w-full max-h-full w-auto h-auto object-contain select-none"
               />
             </div>
             <div>
@@ -450,6 +484,48 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        {/* Banner: Link de Acesso Exclusivo para o Administrador */}
+        <div className="mb-6 p-4 sm:p-5 rounded-3xl bg-[#241710] border border-[#3E291C] text-[#FAF6F0] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-[#E9B949]/20 border border-[#E9B949]/30 flex items-center justify-center text-[#E9B949] shrink-0">
+              <Link2 className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-bold text-sm text-[#FAF6F0]">Link de Acesso Privado ao Painel</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
+                  Oculto dos Visitantes
+                </span>
+              </div>
+              <p className="text-xs text-[#DECFC0] mt-1">
+                A landing page pública não exibe nenhum botão ou link para o painel. Salve este link nos favoritos para acessar:
+                <code className="block sm:inline-block sm:ml-2 mt-1 sm:mt-0 px-2 py-0.5 rounded-md bg-black/40 text-[#E9B949] font-mono text-[11px] select-all">
+                  {adminSecretUrl}
+                </code>
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-start md:self-center shrink-0">
+            <button
+              onClick={handleCopyAdminLink}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold text-xs shadow-xs transition-all cursor-pointer"
+            >
+              {copiedAdminLink ? (
+                <>
+                  <Check className="w-4 h-4 text-emerald-900" />
+                  <span>Link Copiado!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4" />
+                  <span>Copiar Link de Acesso</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
         {/* =========================================================
             TAB 1: FOTOS & VÍDEOS DO ESPAÇO
             ========================================================= */}
@@ -546,6 +622,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     {/* Action buttons */}
                     <div className="pt-4 mt-4 border-t border-[#E8DFD5] flex items-center justify-between">
                       <button
+                        type="button"
                         onClick={() => handleEditMedia(item)}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DECFC0] hover:bg-[#EFE4D5] text-[#553C30] font-bold text-xs transition-colors cursor-pointer"
                       >
@@ -554,8 +631,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </button>
 
                       <button
+                        type="button"
                         onClick={() => handleDeleteMedia(item.id)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-red-700 hover:bg-red-50 font-bold text-xs transition-colors cursor-pointer"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-red-700 hover:bg-red-50 hover:border-red-200 border border-transparent font-bold text-xs transition-colors cursor-pointer"
+                        title="Excluir este card da galeria"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                         <span>Excluir</span>
@@ -592,11 +671,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                 {/* Logo Preview */}
                 <div className="p-6 rounded-2xl bg-[#EFE5D8] border border-[#DECFC0] flex flex-col items-center justify-center text-center mb-5">
-                  <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-[#D9C7B8] shadow-md bg-white mb-3">
+                  <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-[#D9C7B8] shadow-md bg-white mb-3 flex items-center justify-center p-2">
                     <img
                       src={siteState.logo.src}
                       alt="Logo da Cafeteria"
-                      className="w-full h-full object-cover"
+                      className="max-w-full max-h-full w-auto h-auto object-contain select-none"
                     />
                   </div>
                   <span className="text-xs font-bold text-[#3B271E]">Logo Atual</span>
@@ -671,11 +750,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
 
                 {/* Fachada Preview */}
-                <div className="rounded-2xl overflow-hidden border border-[#DECFC0] bg-[#241710] aspect-16/9 mb-4 relative">
+                <div className="rounded-2xl overflow-hidden border border-[#DECFC0] bg-[#241710] aspect-square sm:aspect-16/10 max-h-[280px] mb-4 relative flex items-center justify-center">
                   <img
                     src={siteState.fachada.src}
                     alt="Foto da fachada"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top sm:object-center"
                   />
                   <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#FAF6F0]/90 text-[11px] font-bold text-[#3B271E]">
                     {siteState.fachada.badgeText}
@@ -1027,6 +1106,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 Se você baixou um arquivo JSON do repositório ou quer carregar em outro computador, cole o conteúdo abaixo:
               </p>
 
+              {importSuccessMsg && (
+                <div className="p-3 mb-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+                  <Check className="w-4 h-4 shrink-0 text-emerald-600" />
+                  <span>{importSuccessMsg}</span>
+                </div>
+              )}
+
               {importError && (
                 <div className="p-3 mb-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
@@ -1206,6 +1292,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               {/* Form */}
               <form onSubmit={handleSaveMediaItem} className="p-6 space-y-4 max-h-[78vh] overflow-y-auto">
+                {mediaFormError && (
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                    <span>{mediaFormError}</span>
+                  </div>
+                )}
                 {/* Type selector: Foto vs Video */}
                 <div>
                   <label className="block text-xs font-bold text-[#4A3326] mb-2">
@@ -1403,23 +1495,189 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                 )}
 
-                <div className="pt-4 flex items-center justify-end gap-2 border-t border-[#E8DFD5]">
-                  <button
-                    type="button"
-                    onClick={() => setIsMediaModalOpen(false)}
-                    className="px-4 py-2.5 rounded-xl border border-[#DECFC0] text-xs font-bold text-[#553C30] hover:bg-[#EFE4D5]"
-                  >
-                    Cancelar
-                  </button>
+                <div className="pt-4 flex items-center justify-between gap-2 border-t border-[#E8DFD5]">
+                  {siteState.gallery.some((i) => i.id === editingItem.id) ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const target = editingItem;
+                        setIsMediaModalOpen(false);
+                        setItemToDelete(target);
+                      }}
+                      className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-red-700 hover:bg-red-50 border border-red-200 font-bold text-xs transition-colors cursor-pointer"
+                      title="Excluir este card da galeria"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Excluir Card</span>
+                    </button>
+                  ) : (
+                    <div />
+                  )}
 
-                  <button
-                    type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold text-xs shadow-xs"
-                  >
-                    Salvar na Galeria
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsMediaModalOpen(false)}
+                      className="px-4 py-2.5 rounded-xl border border-[#DECFC0] text-xs font-bold text-[#553C30] hover:bg-[#EFE4D5] cursor-pointer"
+                    >
+                      Cancelar
+                    </button>
+
+                    <button
+                      type="submit"
+                      className="px-5 py-2.5 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold text-xs shadow-xs cursor-pointer"
+                    >
+                      Salvar na Galeria
+                    </button>
+                  </div>
                 </div>
               </form>
+            </motion.div>
+          </div>
+        )}
+
+        {/* =========================================================
+            MODAL DE CONFIRMAÇÃO: EXCLUIR CARD DA GALERIA
+            ========================================================= */}
+        {itemToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setItemToDelete(null)}
+              className="fixed inset-0 bg-[#1D130E]/80 backdrop-blur-xs"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="relative w-full max-w-md bg-[#FAF6F0] rounded-3xl border border-[#D9C7B8] shadow-2xl p-6 z-10 text-[#3B271E]"
+            >
+              <div className="flex items-start gap-3.5 mb-4">
+                <div className="w-11 h-11 rounded-2xl bg-red-100 border border-red-200 text-red-600 flex items-center justify-center shrink-0">
+                  <Trash2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-serif-display text-lg font-bold text-[#3B271E]">
+                    Excluir card da galeria?
+                  </h3>
+                  <p className="text-xs text-[#7A5442] mt-0.5 leading-relaxed">
+                    Tem certeza de que deseja remover este item? O card deixará de ser exibido para os visitantes na página inicial.
+                  </p>
+                </div>
+              </div>
+
+              {/* Item Preview */}
+              <div className="p-3.5 rounded-2xl bg-white border border-[#E8DFD5] flex items-center gap-3.5 mb-5 shadow-2xs">
+                {itemToDelete.src ? (
+                  <img
+                    src={itemToDelete.src}
+                    alt={itemToDelete.title}
+                    className="w-14 h-14 rounded-xl object-cover border border-[#DECFC0] bg-[#241710] shrink-0"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-xl bg-[#241710] flex items-center justify-center text-white shrink-0">
+                    <ImageIcon className="w-6 h-6 text-[#E9B949]" />
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-[#3B271E] truncate">
+                    {itemToDelete.title || 'Item sem título'}
+                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="px-2 py-0.5 rounded-md bg-[#F5EDE3] text-[10px] font-bold text-[#8C5D0B]">
+                      {itemToDelete.categoryLabel || 'Galeria'}
+                    </span>
+                    {itemToDelete.type === 'video' ? (
+                      <span className="flex items-center gap-1 text-[10px] text-[#7A5442] font-semibold">
+                        <Video className="w-3 h-3 text-[#C68B18]" />
+                        <span>Vídeo</span>
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-[10px] text-[#7A5442] font-semibold">
+                        <ImageIcon className="w-3 h-3 text-[#C68B18]" />
+                        <span>Foto</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setItemToDelete(null)}
+                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] text-xs font-bold text-[#553C30] hover:bg-[#EFE4D5] transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => confirmDeleteMedia(itemToDelete.id)}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>Sim, Excluir Card</span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* =========================================================
+            MODAL DE CONFIRMAÇÃO: RESTAURAR PADRÕES DE FÁBRICA
+            ========================================================= */}
+        {isResetConfirmOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsResetConfirmOpen(false)}
+              className="fixed inset-0 bg-[#1D130E]/80 backdrop-blur-xs"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="relative w-full max-w-md bg-[#FAF6F0] rounded-3xl border border-[#D9C7B8] shadow-2xl p-6 z-10 text-[#3B271E]"
+            >
+              <div className="flex items-start gap-3.5 mb-4">
+                <div className="w-11 h-11 rounded-2xl bg-amber-100 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
+                  <RotateCcw className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-serif-display text-lg font-bold text-[#3B271E]">
+                    Restaurar Padrões de Fábrica?
+                  </h3>
+                  <p className="text-xs text-[#7A5442] mt-0.5 leading-relaxed">
+                    Todas as fotos, itens da galeria e textos customizados voltarão à configuração inicial de fábrica da cafeteria.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-2.5 mt-5">
+                <button
+                  type="button"
+                  onClick={() => setIsResetConfirmOpen(false)}
+                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] text-xs font-bold text-[#553C30] hover:bg-[#EFE4D5] transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+
+                <button
+                  type="button"
+                  onClick={confirmResetFactory}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  <span>Restaurar Agora</span>
+                </button>
+              </div>
             </motion.div>
           </div>
         )}

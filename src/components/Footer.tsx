@@ -1,14 +1,13 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Heart, MessageCircle, MapPin, Instagram, Lock } from 'lucide-react';
+import { Heart, MessageCircle, MapPin, Instagram } from 'lucide-react';
 import { RECANTO_7_DATA } from '../data/cafeteriaData';
 
 interface FooterProps {
   onOpenSchedule: () => void;
-  onOpenAdmin: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenSchedule, onOpenAdmin }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenSchedule }) => {
   const currentYear = new Date().getFullYear();
   const whatsappUrl = `https://wa.me/${RECANTO_7_DATA.whatsapp}?text=${encodeURIComponent(
     RECANTO_7_DATA.whatsappMessage
@@ -82,25 +81,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSchedule, onOpenAdmin }) =
           </div>
         </div>
 
-        {/* Bottom copyright line and Admin Trigger */}
+        {/* Bottom copyright line */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-[#8C6249] gap-3">
           <p>© {currentYear} Recanto 7 Cafeteria. Todos os direitos reservados.</p>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={onOpenAdmin}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#D9C7B8] hover:border-[#C68B18] text-[11px] font-bold text-[#674433] hover:text-[#3B271E] bg-[#FAF6F0] hover:bg-[#F3EBE1] transition-all cursor-pointer shadow-2xs"
-            >
-              <Lock className="w-3 h-3 text-[#C68B18]" />
-              <span>Área do Administrador</span>
-            </button>
-
-            <p className="hidden sm:flex items-center gap-1">
-              <span>Feito com</span>
-              <Heart className="w-3.5 h-3.5 fill-[#DCA028] text-[#DCA028]" />
-              <span>para quem aprecia café de verdade.</span>
-            </p>
-          </div>
+          <p className="flex items-center gap-1">
+            <span>Feito com</span>
+            <Heart className="w-3.5 h-3.5 fill-[#DCA028] text-[#DCA028]" />
+            <span>para quem aprecia café de verdade.</span>
+          </p>
         </div>
       </div>
     </motion.footer>

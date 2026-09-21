@@ -1,14 +1,15 @@
 import { SiteConfig, GalleryMediaItem, AdminCredentials } from '../types';
 export type { SiteConfig, GalleryMediaItem, AdminCredentials };
-import defaultLogo from '../assets/images/recanto_7_logo_1789933091731.jpg';
-import defaultFachada from '../assets/images/fachada_amarela_1789934046294.jpg';
+import defaultLogo from '../assets/images/recanto_logo_custom.jpg';
+import defaultFachada from '../assets/images/recanto_fachada_custom.png';
+import latteArtImage from '../assets/images/recanto_gallery_item-1.jpg';
 import heroCafeImage from '../assets/images/recanto_hero_cafe_1789933102401.jpg';
-import pastriesImage from '../assets/images/recanto_pastries_1789933523946.jpg';
+import pastriesImage from '../assets/images/recanto_gallery_item-2.jpg';
 import pourOverImage from '../assets/images/recanto_pourover_1789933538581.jpg';
-import interiorImage from '../assets/images/recanto_interior_1789933549590.jpg';
+import interiorImage from '../assets/images/recanto_gallery_item-4.jpg';
 import cakesImage from '../assets/images/recanto_cakes_1789933561227.jpg';
 
-const SITE_CONFIG_KEY = 'recanto7_site_config_v3';
+const SITE_CONFIG_KEY = 'recanto7_site_config_v4';
 const ADMIN_CREDENTIALS_KEY = 'recanto7_admin_credentials_v1';
 const ADMIN_SESSION_KEY = 'recanto7_admin_session_v1';
 
@@ -81,7 +82,7 @@ export const DEFAULT_GALLERY_ITEMS: GalleryMediaItem[] = [
     category: 'cafes',
     categoryLabel: 'Cafés Especiais',
     description: 'Extração cremosa com leite vaporizado na temperatura perfeita e grãos de torra equilibrada.',
-    src: heroCafeImage,
+    src: latteArtImage,
     tag: 'Mais Pedido',
   },
   {
@@ -90,7 +91,7 @@ export const DEFAULT_GALLERY_ITEMS: GalleryMediaItem[] = [
     type: 'image',
     category: 'receitas',
     categoryLabel: 'Receitas Frescas',
-    description: 'Croissants folhados crocantes e quitutes dourados preparados frescos diariamente pela manhã.',
+    description: 'Salgados folhados e quitutes dourados preparados frescos diariamente pela manhã.',
     src: pastriesImage,
     tag: 'Produção Diária',
   },

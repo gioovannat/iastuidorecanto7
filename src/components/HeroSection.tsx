@@ -8,7 +8,6 @@ import {
   Coffee,
   Heart,
   ExternalLink,
-  Upload,
 } from 'lucide-react';
 import { RECANTO_7_DATA } from '../data/cafeteriaData';
 import { getRecantoStatus, BusinessStatus } from '../utils/businessHours';
@@ -17,14 +16,12 @@ interface HeroSectionProps {
   logoSrc: string;
   heroImageSrc: string;
   onOpenSchedule: () => void;
-  onLogoUploadClick: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   logoSrc,
   heroImageSrc,
   onOpenSchedule,
-  onLogoUploadClick,
 }) => {
   const [businessStatus, setBusinessStatus] = useState<BusinessStatus>(() => getRecantoStatus());
 
@@ -65,7 +62,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span className="w-2 h-2 rounded-full bg-[#E9B949] animate-pulse" />
               <span>Bairro Maiobão • Paço do Lumiar, MA</span>
               <span className="text-[#C8B8A6]">•</span>
-              <span className="text-[#8C6249]">Cafeteria Artesanal</span>
+              <span className="text-[#8C6249]">Cafeteria</span>
             </motion.div>
 
             {/* Logo Badge & Title Group */}
@@ -74,32 +71,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6 mb-6"
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6 mb-6"
             >
               {/* Logo Emblem Frame */}
-              <div className="relative group shrink-0">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl p-1 bg-gradient-to-br from-[#F5D88C] via-[#E8D4C2] to-[#B89073] shadow-md hover:shadow-lg transition-shadow">
-                  <div className="w-full h-full rounded-[14px] overflow-hidden bg-[#FAF6F0] flex items-center justify-center relative">
+              <div className="relative group shrink-0 w-24 h-24 sm:w-28 sm:h-28">
+                <div className="w-full h-full rounded-2xl p-1.5 bg-gradient-to-br from-[#F5D88C] via-[#E8D4C2] to-[#B89073] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="w-full h-full rounded-[14px] overflow-hidden bg-white flex items-center justify-center p-1.5 relative">
                     <img
                       src={logoSrc}
                       alt="Logotipo Oficial Recanto 7"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="max-w-full max-h-full w-auto h-auto object-contain select-none group-hover:scale-105 transition-transform duration-300"
                       referrerPolicy="no-referrer"
                     />
-                    {/* Subtle hover upload overlay */}
-                    <button
-                      onClick={onLogoUploadClick}
-                      title="Alterar imagem do logotipo"
-                      className="absolute inset-0 bg-[#3B271E]/60 text-white opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 transition-opacity text-[11px] font-medium cursor-pointer"
-                    >
-                      <Upload className="w-4 h-4 text-[#F7D070]" />
-                      <span>Trocar Logo</span>
-                    </button>
                   </div>
                 </div>
                 {/* Floating mini bean accent */}
-                <div className="absolute -bottom-2 -right-2 bg-[#E9B949] text-[#2C1D16] p-1.5 rounded-full shadow-xs border-2 border-[#FAF6F0]">
-                  <Coffee className="w-3.5 h-3.5" />
+                <div className="absolute -bottom-1 -right-1 sm:-bottom-1.5 sm:-right-1.5 bg-[#E9B949] text-[#2C1D16] p-1.5 sm:p-2 rounded-full shadow-md border-2 border-[#FAF6F0] flex items-center justify-center z-10 pointer-events-none">
+                  <Coffee className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
               </div>
 
@@ -135,7 +123,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.65, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8"
+              className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-8"
             >
               {/* Primary WhatsApp Action */}
               <a
@@ -143,30 +131,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 id="hero-whatsapp-button"
-                className="group relative inline-flex items-center justify-center gap-3 px-7 py-4 rounded-xl bg-gradient-to-r from-[#E9B949] via-[#E2AF3C] to-[#DCA028] hover:from-[#DFAC3A] hover:to-[#CF951E] text-[#241710] font-bold text-base shadow-md hover:shadow-lg transition-all active:scale-[0.98] cursor-pointer"
+                title={`Fale no WhatsApp: ${RECANTO_7_DATA.whatsappFormatted}`}
+                className="group relative inline-flex items-center justify-center gap-2.5 px-5 h-12 rounded-xl bg-gradient-to-r from-[#E9B949] via-[#E2AF3C] to-[#DCA028] hover:from-[#DFAC3A] hover:to-[#CF951E] text-[#241710] font-bold text-sm shadow-xs hover:shadow transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap"
               >
-                <div className="w-8 h-8 rounded-full bg-[#241710]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <MessageCircle className="w-5 h-5 fill-[#241710] text-[#241710]" />
+                <div className="w-6 h-6 rounded-full bg-[#241710]/10 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                  <MessageCircle className="w-3.5 h-3.5 fill-[#241710] text-[#241710]" />
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-[11px] uppercase tracking-wider font-semibold opacity-80">
-                    Fale no WhatsApp
-                  </span>
-                  <span className="text-base font-extrabold tracking-tight">
-                    {RECANTO_7_DATA.whatsappFormatted}
-                  </span>
-                </div>
-                <ExternalLink className="w-4 h-4 ml-1 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                <span>Fale no WhatsApp</span>
+                <span className="text-xs font-semibold opacity-85 hidden xl:inline">
+                  • {RECANTO_7_DATA.whatsappFormatted}
+                </span>
+                <ExternalLink className="w-3.5 h-3.5 ml-0.5 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </a>
 
               {/* View Schedule Modal Trigger with Live Open/Closed indicator */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <button
                   type="button"
                   onClick={onOpenSchedule}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-4 rounded-xl border border-[#D9C7B8] bg-[#FAF6F0] hover:bg-[#F3EBE1] text-[#674433] hover:text-[#3B271E] font-semibold text-sm transition-colors cursor-pointer shadow-2xs"
+                  className="inline-flex items-center justify-center gap-2 px-5 h-12 rounded-xl border border-[#D9C7B8] bg-[#FAF6F0] hover:bg-[#F3EBE1] text-[#674433] hover:text-[#3B271E] font-semibold text-sm transition-colors cursor-pointer shadow-2xs whitespace-nowrap"
                 >
-                  <Clock className="w-4 h-4 text-[#C68B18]" />
+                  <Clock className="w-4 h-4 text-[#C68B18] shrink-0" />
                   <span>Horários & Local</span>
                 </button>
 
@@ -175,7 +160,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   type="button"
                   onClick={onOpenSchedule}
                   title="Ver horários completos da semana"
-                  className={`inline-flex items-center gap-2.5 px-4 py-3 rounded-xl border text-xs font-semibold cursor-pointer transition-all text-left shadow-2xs ${
+                  className={`inline-flex items-center justify-center gap-2.5 px-4 h-12 rounded-xl border text-xs font-semibold cursor-pointer transition-all text-left shadow-2xs whitespace-nowrap ${
                     businessStatus.isOpen
                       ? 'bg-emerald-50 text-emerald-950 border-emerald-300 hover:bg-emerald-100'
                       : 'bg-[#FFF8EE] text-[#674433] border-[#EAD8C7] hover:bg-[#F6EDE0]'
@@ -191,14 +176,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       }`}
                     />
                   </span>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-1.5 leading-tight">
-                    <span className="font-bold text-[#2C1D16]">
-                      {businessStatus.statusText}
-                    </span>
-                    <span className="text-[11px] text-[#7A5442] font-medium">
-                      • {businessStatus.detailText}
-                    </span>
-                  </div>
+                  <span className="font-bold text-[#2C1D16]">
+                    {businessStatus.statusText}
+                  </span>
+                  <span className="text-[11px] text-[#7A5442] font-medium hidden sm:inline">
+                    • {businessStatus.detailText}
+                  </span>
                 </button>
               </div>
             </motion.div>
@@ -246,30 +229,48 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             className="lg:col-span-5 relative"
           >
             {/* Main Aesthetic Photo Frame */}
-            <div className="relative mx-auto max-w-md lg:max-w-none rounded-3xl p-3 sm:p-4 bg-gradient-to-b from-[#F9F4EC] to-[#EFE6DC] border border-[#DECFC0] shadow-xl">
+            <div className="relative mx-auto max-w-md sm:max-w-xl lg:max-w-none rounded-3xl p-3 sm:p-4 bg-gradient-to-b from-[#F9F4EC] to-[#EFE6DC] border border-[#DECFC0] shadow-xl">
               
-              <div className="relative rounded-2xl overflow-hidden aspect-4/3 sm:aspect-4/3 lg:aspect-5/4 shadow-inner bg-[#4B3327]">
+              <div className="relative rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[16/10] lg:aspect-[5/4] shadow-inner bg-[#2C1D16] flex items-center justify-center">
                 <img
                   src={heroImageSrc}
                   alt="Ambiente aconchegante da Cafeteria Recanto 7 com café artesanal"
-                  className="w-full h-full object-cover hover:scale-103 transition-transform duration-700"
+                  className="w-full h-full object-cover object-center hover:scale-103 transition-transform duration-700"
                   referrerPolicy="no-referrer"
                 />
 
                 {/* Soft gradient wash */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#2F1D15]/80 via-transparent to-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#2F1D15]/85 via-transparent to-black/20 pointer-events-none" />
 
-                {/* Floating Badge Bottom Left: Address */}
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3 p-3 rounded-xl backdrop-blur-md bg-[#FAF6F0]/92 border border-white/40 shadow-lg text-[#3B271E]">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-lg bg-[#F5EBE1] flex items-center justify-center text-[#B88114]">
+                {/* Top Left Tag: Handcrafted Cozy Detail */}
+                <div className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-10 h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full bg-[#2C1D16]/85 backdrop-blur-md text-[#FAF6F0] text-[11px] sm:text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 sm:gap-2 shadow-md border border-white/15">
+                  <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#E9B949] shrink-0" />
+                  <span>
+                    <span className="sm:hidden">Pausas com afeto</span>
+                    <span className="hidden sm:inline">Pausas que aquecem a alma</span>
+                  </span>
+                </div>
+
+                {/* Top Right Tag: Fresh Coffee Badge */}
+                <div className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 z-10 h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full bg-[#FAF6F0]/92 backdrop-blur-md text-[#2C1D16] text-[11px] sm:text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 sm:gap-2 shadow-md border border-white/60">
+                  <span className="flex h-2 w-2 rounded-full bg-[#E9B949] animate-pulse shrink-0" />
+                  <span>
+                    <span className="sm:hidden">Café Especial</span>
+                    <span className="hidden sm:inline">Café Especial & Afeto</span>
+                  </span>
+                </div>
+
+                {/* Floating Badge Bottom: Address & Map Action */}
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-10 flex items-center justify-between gap-3 p-3 rounded-xl backdrop-blur-md bg-[#FAF6F0]/95 border border-white/60 shadow-lg text-[#3B271E]">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-9 h-9 rounded-lg bg-[#F5EBE1] flex items-center justify-center text-[#B88114] shrink-0">
                       <MapPin className="w-4 h-4" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-[11px] font-semibold text-[#8C6249] uppercase tracking-wider">
                         Onde nos encontrar
                       </p>
-                      <p className="text-xs font-bold text-[#3B271E]">
+                      <p className="text-xs font-bold text-[#3B271E] truncate">
                         Maiobão • Paço do Lumiar
                       </p>
                     </div>
@@ -279,37 +280,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     href={RECANTO_7_DATA.mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#E9B949] hover:bg-[#DCA028] text-[#2C1D16] text-xs font-bold transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#E9B949] hover:bg-[#DCA028] text-[#2C1D16] text-xs font-bold transition-colors cursor-pointer shrink-0 shadow-xs"
                   >
                     <span>Ver no Mapa</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
               </div>
-
-              {/* Floating Accent Tag: Fresh Daily Badge */}
-              <div className="absolute -top-3 -right-2 sm:-right-4 px-3.5 py-2 rounded-xl bg-[#FAF6F0] border border-[#E3D3C2] shadow-md flex items-center gap-2">
-                <span className="flex h-2.5 w-2.5 rounded-full bg-[#E9B949]" />
-                <span className="text-xs font-bold text-[#3B271E]">
-                  Café Especial & Afeto
-                </span>
-              </div>
-
-              {/* Floating Accent Tag: Handcrafted Detail */}
-              <div className="hidden sm:flex absolute -bottom-3 -left-3 px-3.5 py-1.5 rounded-full bg-[#3B271E] text-[#FDF0D5] text-xs font-medium items-center gap-1.5 shadow-md">
-                <Sparkles className="w-3.5 h-3.5 text-[#E9B949]" />
-                <span>Pausas que aquecem a alma</span>
-              </div>
             </div>
 
             {/* Quick Instagram callout underneath */}
-            <div className="mt-4 flex items-center justify-center lg:justify-end gap-2 text-xs font-medium text-[#7A5442]">
+            <div className="mt-3 flex items-center justify-center gap-2 text-xs font-medium text-[#7A5442] text-center">
               <span>Acompanhe o dia a dia no Instagram:</span>
               <a
                 href={RECANTO_7_DATA.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-bold text-[#3B271E] hover:text-[#C68B18] underline decoration-[#E9B949] underline-offset-2 flex items-center gap-1"
+                className="font-bold text-[#3B271E] hover:text-[#C68B18] underline decoration-[#E9B949] underline-offset-2 inline-flex items-center gap-1"
               >
                 @recanto_7cafeteria
                 <ExternalLink className="w-3 h-3" />

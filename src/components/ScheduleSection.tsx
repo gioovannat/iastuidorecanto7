@@ -9,50 +9,24 @@ import {
   AlertCircle,
   Eye,
   X,
-  Upload,
-  RotateCcw,
 } from 'lucide-react';
 import { RECANTO_7_DATA } from '../data/cafeteriaData';
 import defaultFachadaImage from '../assets/images/fachada_amarela_1789934046294.jpg';
 import { getRecantoStatus, BusinessStatus } from '../utils/businessHours';
 
-export const ScheduleSection: React.FC = () => {
-  const [fachadaSrc, setFachadaSrc] = useState<string>(() => {
-    try {
-      return localStorage.getItem('recanto7_custom_facade') || defaultFachadaImage;
-    } catch {
-      return defaultFachadaImage;
-    }
-  });
+export interface ScheduleSectionProps {
+  fachadaSrc?: string;
+  fachadaCaption?: string;
+  fachadaBadgeText?: string;
+}
+
+export const ScheduleSection: React.FC<ScheduleSectionProps> = ({
+  fachadaSrc = defaultFachadaImage,
+  fachadaCaption = 'Procure a fachada amarela',
+  fachadaBadgeText = 'Fachada do Recanto 7',
+}) => {
   const [isPhotoOpen, setIsPhotoOpen] = useState(false);
   const [businessStatus, setBusinessStatus] = useState<BusinessStatus>(() => getRecantoStatus());
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setFachadaSrc(result);
-        try {
-          localStorage.setItem('recanto7_custom_facade', result);
-        } catch (err) {
-          console.warn('Could not save facade to localStorage', err);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleResetFachada = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setFachadaSrc(defaultFachadaImage);
-    try {
-      localStorage.removeItem('recanto7_custom_facade');
-    } catch (err) {
-      console.warn('Could not reset facade in localStorage', err);
-    }
-  };
 
   const whatsappDirectUrl = `https://wa.me/${RECANTO_7_DATA.whatsapp}?text=${encodeURIComponent(
     RECANTO_7_DATA.whatsappMessage
@@ -198,12 +172,12 @@ export const ScheduleSection: React.FC = () => {
                 <div className="mb-4 rounded-2xl overflow-hidden border border-[#DECFC0] bg-[#F5EDE3] shadow-xs group">
                   <div
                     onClick={() => setIsPhotoOpen(true)}
-                    className="relative cursor-pointer aspect-4/3 w-full overflow-hidden bg-[#EAE0D4]"
+                    className="relative cursor-pointer aspect-square sm:aspect-[4/3] w-full max-h-[380px] overflow-hidden bg-[#241710] flex items-center justify-center"
                   >
                     <img
                       src={fachadaSrc}
                       alt="Fachada amarela do Recanto 7 Café e Cia no Maiobão"
-                      className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
+                      className="w-full h-full object-cover object-top sm:object-center group-hover:scale-104 transition-transform duration-500 ease-out"
                       referrerPolicy="no-referrer"
                     />
 
@@ -213,7 +187,7 @@ export const ScheduleSection: React.FC = () => {
                     {/* Top Pill */}
                     <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF6F0]/90 backdrop-blur-xs text-[11px] font-bold text-[#3B271E] border border-[#DECFC0] shadow-2xs">
                       <span className="w-2 h-2 rounded-full bg-[#E9B949]" />
-                      <span>Fachada do Recanto 7</span>
+                      <span>{fachadaBadgeText}</span>
                     </div>
 
                     {/* Click to expand hint */}
@@ -227,36 +201,19 @@ export const ScheduleSection: React.FC = () => {
                     <div className="flex items-center gap-2.5">
                       <span className="w-3 h-3 rounded-full bg-[#E9B949] ring-4 ring-[#E9B949]/30 shrink-0" />
                       <p className="text-xs sm:text-sm font-bold text-[#3B271E] tracking-tight">
-                        Procure a fachada amarela
+                        {fachadaCaption}
                       </p>
                     </div>
 
-                    {/* Quick upload or reset facade if user wants */}
-                    <div className="flex items-center gap-1.5">
-                      <label
-                        title="Substituir foto da fachada se desejar"
-                        className="p-1.5 rounded-lg hover:bg-[#F2E4D2] text-[#8C6249] hover:text-[#3B271E] cursor-pointer transition-colors text-[11px] flex items-center gap-1"
-                      >
-                        <Upload className="w-3 h-3" />
-                        <span className="hidden sm:inline">Trocar</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                        />
-                      </label>
-
-                      {fachadaSrc !== defaultFachadaImage && (
-                        <button
-                          onClick={handleResetFachada}
-                          title="Restaurar foto original"
-                          className="p-1.5 rounded-lg hover:bg-[#F2E4D2] text-[#8C6249] hover:text-[#3B271E] cursor-pointer transition-colors text-[11px]"
-                        >
-                          <RotateCcw className="w-3 h-3" />
-                        </button>
-                      )}
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setIsPhotoOpen(true)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-[#8C6249] hover:text-[#3B271E] hover:bg-[#F2E4D2] transition-colors cursor-pointer"
+                      title="Ver foto em tamanho ampliado"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Ampliar</span>
+                    </button>
                   </div>
                 </div>
 
@@ -299,7 +256,7 @@ export const ScheduleSection: React.FC = () => {
                 className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold text-sm shadow-xs hover:shadow-md transition-all active:scale-98"
               >
                 <MessageCircle className="w-4 h-4 fill-[#241710]" />
-                <span>Iniciar conversa no {RECANTO_7_DATA.whatsappFormatted}</span>
+                <span>Iniciar conversa no WhatsApp</span>
               </a>
             </div>
 
@@ -333,7 +290,7 @@ export const ScheduleSection: React.FC = () => {
                 <div className="flex items-center gap-2.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#E9B949]" />
                   <span className="font-serif-display font-bold text-[#3B271E] text-base">
-                    Fachada do Recanto 7
+                    {fachadaBadgeText}
                   </span>
                 </div>
 
@@ -346,11 +303,11 @@ export const ScheduleSection: React.FC = () => {
               </div>
 
               {/* Photo */}
-              <div className="relative max-h-[65vh] bg-[#241710] flex items-center justify-center overflow-hidden">
+              <div className="relative max-h-[65vh] bg-[#1D130E] flex items-center justify-center p-2 sm:p-4 overflow-hidden">
                 <img
                   src={fachadaSrc}
                   alt="Fachada amarela do Recanto 7 Café e Cia"
-                  className="w-full h-full object-contain select-none"
+                  className="max-w-full max-h-[60vh] w-auto h-auto object-contain select-none rounded-lg"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -361,7 +318,7 @@ export const ScheduleSection: React.FC = () => {
                   <span className="w-3.5 h-3.5 rounded-full bg-[#E9B949] ring-4 ring-[#E9B949]/30 shrink-0" />
                   <div>
                     <p className="font-bold text-sm sm:text-base text-[#3B271E]">
-                      Procure a fachada amarela
+                      {fachadaCaption}
                     </p>
                     <p className="text-xs text-[#7A5442]">
                       Bairro Maiobão • Paço do Lumiar - Maranhão

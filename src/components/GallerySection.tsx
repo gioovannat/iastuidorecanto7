@@ -213,11 +213,11 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ items }) => {
                 className="group relative rounded-2xl overflow-hidden bg-[#FAF6F0] border border-[#E3D3C2] shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer flex flex-col"
               >
                 {/* Image / Video Container */}
-                <div className="relative aspect-4/3 w-full overflow-hidden bg-[#4B3327]">
+                <div className="relative aspect-[4/3] sm:aspect-[4/3] w-full overflow-hidden bg-[#241710] flex items-center justify-center">
                   <img
                     src={item.src}
                     alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
                     referrerPolicy="no-referrer"
                   />
 
@@ -355,7 +355,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ items }) => {
               </div>
 
               {/* Lightbox Main Image or Video Display */}
-              <div className="relative flex-1 min-h-[300px] sm:min-h-[420px] max-h-[55vh] sm:max-h-[62vh] bg-[#2F1E16] flex items-center justify-center overflow-hidden">
+              <div className="relative flex-1 min-h-[260px] sm:min-h-[400px] max-h-[60vh] sm:max-h-[68vh] bg-[#140D09] flex items-center justify-center p-2 sm:p-4 overflow-hidden">
                 {filteredItems[selectedImageIndex].type === 'video' && filteredItems[selectedImageIndex].videoUrl ? (
                   filteredItems[selectedImageIndex].videoUrl?.includes('youtube.com') ||
                   filteredItems[selectedImageIndex].videoUrl?.includes('youtu.be') ? (
@@ -370,21 +370,21 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ items }) => {
                       title={filteredItems[selectedImageIndex].title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
-                      className="w-full h-full aspect-video border-0"
+                      className="w-full h-full max-w-3xl aspect-video border-0 rounded-lg"
                     />
                   ) : (
                     <video
                       src={filteredItems[selectedImageIndex].videoUrl}
                       controls
                       autoPlay
-                      className="w-full h-full object-contain"
+                      className="max-w-full max-h-[56vh] sm:max-h-[64vh] w-auto h-auto object-contain rounded-lg"
                     />
                   )
                 ) : (
                   <img
                     src={filteredItems[selectedImageIndex].src}
                     alt={filteredItems[selectedImageIndex].title}
-                    className="w-full h-full object-contain select-none"
+                    className="max-w-full max-h-[56vh] sm:max-h-[64vh] w-auto h-auto object-contain select-none mx-auto rounded-lg shadow-md"
                     referrerPolicy="no-referrer"
                   />
                 )}

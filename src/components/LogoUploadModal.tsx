@@ -110,11 +110,11 @@ export const LogoUploadModal: React.FC<LogoUploadModalProps> = ({
           <div className="p-6 space-y-5">
             {/* Current preview */}
             <div className="flex items-center gap-4 p-3 bg-[#F5EDE3]/60 rounded-xl border border-[#EAE0D4]">
-              <div className="w-16 h-16 rounded-xl overflow-hidden bg-white border border-[#D9C7B8] flex items-center justify-center shrink-0">
+              <div className="w-16 h-16 rounded-xl overflow-hidden bg-white border border-[#D9C7B8] flex items-center justify-center p-1 shrink-0">
                 <img
                   src={currentLogo}
                   alt="Logo preview"
-                  className="w-full h-full object-cover"
+                  className="max-w-full max-h-full w-auto h-auto object-contain select-none"
                   referrerPolicy="no-referrer"
                 />
               </div>

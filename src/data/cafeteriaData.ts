@@ -7,11 +7,11 @@ export const RECANTO_7_DATA: CafeteriaInfo = {
     'Seu refúgio diário para saborear cafés especiais e delícias artesanais preparadas com afeto. Um ambiente calmo e acolhedor no Maiobão para desacelerar, conversar e apreciar os melhores momentos da vida.',
   whatsapp: '5598985353197',
   whatsappFormatted: '(98) 98535-3197',
-  whatsappMessage: 'Olá, Recanto 7! Gostaria de saber mais informações e os preparos do dia.',
+  whatsappMessage: 'Olá! Gostaria de saber mais sobre a cafeteria e as delícias do dia.',
   neighborhood: 'Maiobão',
   city: 'Paço do Lumiar',
   state: 'MA',
-  mapsUrl: 'https://maps.app.goo.gl/bioZme5C6STbN4yi8',
+  mapsUrl: 'https://maps.google.com/?q=Recanto+7+Cafeteria+Maiobao+Paco+do+Lumiar',
   instagramUrl: 'https://www.instagram.com/recanto_7cafeteria',
   schedule: [
     { day: 'Segunda-feira', hours: 'Fechado para descanso', isOpenToday: false },
