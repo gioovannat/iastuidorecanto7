@@ -10,7 +10,7 @@ export interface BusinessStatus {
  * Recanto 7 Operating Hours:
  * - Segunda: Fechado
  * - Terça: 07:30 às 11:00
- * - Quarta a Sábado: 07:30 às 11:00 e 16:00 às 20:00
+ * - Quarta a Sábado: 07:30 às 11:00 e 15:00 às 18:30
  * - Domingo: 07:30 às 11:00
  */
 export function getRecantoStatus(currentDate: Date = new Date()): BusinessStatus {
@@ -22,8 +22,8 @@ export function getRecantoStatus(currentDate: Date = new Date()): BusinessStatus
 
   const minMorningOpen = 7 * 60 + 30; // 07:30 -> 450
   const minMorningClose = 11 * 60;     // 11:00 -> 660
-  const minAfternoonOpen = 16 * 60;    // 16:00 -> 960
-  const minAfternoonClose = 20 * 60;   // 20:00 -> 1200
+  const minAfternoonOpen = 15 * 60;        // 15:00 -> 900
+  const minAfternoonClose = 18 * 60 + 30;  // 18:30 -> 1110
 
   // Domingo (0)
   if (day === 0) {
@@ -111,7 +111,7 @@ export function getRecantoStatus(currentDate: Date = new Date()): BusinessStatus
       return {
         isOpen: true,
         statusText: 'Aberto agora',
-        detailText: 'Fecha às 11:00 (reabre às 16:00)',
+        detailText: 'Fecha às 11:00 (reabre às 15:00)',
         fullText: 'Aberto agora • Fecha às 11:00',
         colorClass: 'bg-emerald-100 text-emerald-900 border-emerald-300',
       };
@@ -120,8 +120,8 @@ export function getRecantoStatus(currentDate: Date = new Date()): BusinessStatus
       return {
         isOpen: false,
         statusText: 'Fechado agora',
-        detailText: 'Abre hoje às 16:00',
-        fullText: 'Fechado • Abre hoje às 16:00',
+        detailText: 'Abre hoje às 15:00',
+        fullText: 'Fechado • Abre hoje às 15:00',
         colorClass: 'bg-amber-100 text-amber-900 border-amber-300',
       };
     }
@@ -129,14 +129,14 @@ export function getRecantoStatus(currentDate: Date = new Date()): BusinessStatus
       return {
         isOpen: true,
         statusText: 'Aberto agora',
-        detailText: 'Fecha às 20:00',
-        fullText: 'Aberto agora • Fecha às 20:00',
+        detailText: 'Fecha às 18:30',
+        fullText: 'Aberto agora • Fecha às 18:30',
         colorClass: 'bg-emerald-100 text-emerald-900 border-emerald-300',
       };
     }
-    // After 20:00
+    // After 18:30
     if (day === 6) {
-      // Saturday after 20:00 -> opens Sunday 07:30
+      // Saturday after 18:30 -> opens Sunday 07:30
       return {
         isOpen: false,
         statusText: 'Fechado agora',
@@ -145,7 +145,7 @@ export function getRecantoStatus(currentDate: Date = new Date()): BusinessStatus
         colorClass: 'bg-stone-100 text-stone-700 border-stone-300',
       };
     }
-    // Wed, Thu, Fri after 20:00 -> opens tomorrow 07:30
+    // Wed, Thu, Fri after 18:30 -> opens tomorrow 07:30
     return {
       isOpen: false,
       statusText: 'Fechado agora',
