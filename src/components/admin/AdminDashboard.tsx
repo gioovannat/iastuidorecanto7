@@ -44,6 +44,9 @@ import {
   saveAdminCredentials,
 } from '../../utils/siteContentStorage';
 import { optimizeImageFile } from '../../utils/imageOptimizer';
+import defaultLogoImage from '../../assets/images/recanto_logo_custom.jpg';
+import defaultFachadaImage from '../../assets/images/recanto_fachada_custom.png';
+import defaultMediaFallback from '../../assets/images/recanto_gallery_item-1.jpg';
 
 interface AdminDashboardProps {
   config: SiteConfig;
@@ -560,10 +563,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   className="bg-[#FAF6F0] rounded-3xl border border-[#DECFC0] overflow-hidden shadow-xs flex flex-col group hover:border-[#C68B18] transition-all"
                 >
                   {/* Media Preview Box */}
-                  <div className="relative aspect-16/10 bg-[#241710] overflow-hidden">
+                  <div className="relative aspect-[16/10] bg-[#241710] overflow-hidden">
                     <img
                       src={item.src}
                       alt={item.title}
+                      onError={(e) => {
+                        e.currentTarget.src = defaultMediaFallback;
+                      }}
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                     />
 
@@ -675,6 +681,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <img
                       src={siteState.logo.src}
                       alt="Logo da Cafeteria"
+                      onError={(e) => {
+                        e.currentTarget.src = defaultLogoImage;
+                      }}
                       className="max-w-full max-h-full w-auto h-auto object-contain select-none"
                     />
                   </div>
@@ -750,10 +759,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
 
                 {/* Fachada Preview */}
-                <div className="rounded-2xl overflow-hidden border border-[#DECFC0] bg-[#241710] aspect-square sm:aspect-16/10 max-h-[280px] mb-4 relative flex items-center justify-center">
+                <div className="rounded-2xl overflow-hidden border border-[#DECFC0] bg-[#241710] aspect-square sm:aspect-[16/10] max-h-[280px] mb-4 relative flex items-center justify-center">
                   <img
                     src={siteState.fachada.src}
                     alt="Foto da fachada"
+                    onError={(e) => {
+                      e.currentTarget.src = defaultFachadaImage;
+                    }}
                     className="w-full h-full object-cover object-top sm:object-center"
                   />
                   <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#FAF6F0]/90 text-[11px] font-bold text-[#3B271E]">
@@ -1445,6 +1457,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <img
                           src={editingItem.src}
                           alt="Prévia"
+                          onError={(e) => {
+                            e.currentTarget.src = defaultMediaFallback;
+                          }}
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -1575,6 +1590,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <img
                     src={itemToDelete.src}
                     alt={itemToDelete.title}
+                    onError={(e) => {
+                      e.currentTarget.src = defaultMediaFallback;
+                    }}
                     className="w-14 h-14 rounded-xl object-cover border border-[#DECFC0] bg-[#241710] shrink-0"
                   />
                 ) : (

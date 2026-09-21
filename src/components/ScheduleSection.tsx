@@ -177,6 +177,9 @@ export const ScheduleSection: React.FC<ScheduleSectionProps> = ({
                     <img
                       src={fachadaSrc}
                       alt="Fachada amarela do Recanto 7 Café e Cia no Maiobão"
+                      onError={(e) => {
+                        e.currentTarget.src = defaultFachadaImage;
+                      }}
                       className="w-full h-full object-cover object-top sm:object-center group-hover:scale-104 transition-transform duration-500 ease-out"
                       referrerPolicy="no-referrer"
                     />
@@ -307,6 +310,9 @@ export const ScheduleSection: React.FC<ScheduleSectionProps> = ({
                 <img
                   src={fachadaSrc}
                   alt="Fachada amarela do Recanto 7 Café e Cia"
+                  onError={(e) => {
+                    e.currentTarget.src = defaultFachadaImage;
+                  }}
                   className="max-w-full max-h-[60vh] w-auto h-auto object-contain select-none rounded-lg"
                   referrerPolicy="no-referrer"
                 />

@@ -13,6 +13,7 @@ import {
   Play,
 } from 'lucide-react';
 import heroCafeImage from '../assets/images/recanto_hero_cafe_1789933102401.jpg';
+import latteArtImage from '../assets/images/recanto_gallery_item-1.jpg';
 import pastriesImage from '../assets/images/recanto_pastries_1789933523946.jpg';
 import pourOverImage from '../assets/images/recanto_pourover_1789933538581.jpg';
 import interiorImage from '../assets/images/recanto_interior_1789933549590.jpg';
@@ -20,6 +21,25 @@ import cakesImage from '../assets/images/recanto_cakes_1789933561227.jpg';
 import fachadaImage from '../assets/images/fachada_amarela_1789934046294.jpg';
 import { RECANTO_7_DATA } from '../data/cafeteriaData';
 import { GalleryMediaItem } from '../types';
+
+/**
+ * Robust YouTube Embed URL builder that supports standard, short, mobile and embed links.
+ */
+function getYouTubeEmbedUrl(url?: string): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  if (trimmed.includes('/embed/')) {
+    return trimmed.includes('?') ? trimmed : `${trimmed}?autoplay=1`;
+  }
+  // Matches youtube.com/watch?v=..., youtu.be/..., youtube.com/shorts/...
+  const match = trimmed.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/
+  );
+  if (match && match[1]) {
+    return `https://www.youtube.com/embed/${match[1]}?autoplay=1`;
+  }
+  return null;
+}
 
 interface GallerySectionProps {
   items?: GalleryMediaItem[];
@@ -217,6 +237,10 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ items }) => {
                   <img
                     src={item.src}
                     alt={item.title}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = latteArtImage;
+                    }}
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
                     referrerPolicy="no-referrer"
                   />
@@ -357,33 +381,31 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ items }) => {
               {/* Lightbox Main Image or Video Display */}
               <div className="relative flex-1 min-h-[260px] sm:min-h-[400px] max-h-[60vh] sm:max-h-[68vh] bg-[#140D09] flex items-center justify-center p-2 sm:p-4 overflow-hidden">
                 {filteredItems[selectedImageIndex].type === 'video' && filteredItems[selectedImageIndex].videoUrl ? (
-                  filteredItems[selectedImageIndex].videoUrl?.includes('youtube.com') ||
-                  filteredItems[selectedImageIndex].videoUrl?.includes('youtu.be') ? (
+                  getYouTubeEmbedUrl(filteredItems[selectedImageIndex].videoUrl) ? (
                     <iframe
-                      src={
-                        filteredItems[selectedImageIndex].videoUrl?.includes('embed')
-                          ? filteredItems[selectedImageIndex].videoUrl
-                          : `https://www.youtube.com/embed/${
-                              filteredItems[selectedImageIndex].videoUrl?.split('v=')[1]?.split('&')[0] || ''
-                            }?autoplay=1`
-                      }
+                      src={getYouTubeEmbedUrl(filteredItems[selectedImageIndex].videoUrl)!}
                       title={filteredItems[selectedImageIndex].title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
-                      className="w-full h-full max-w-3xl aspect-video border-0 rounded-lg"
+                      className="w-full h-full max-w-3xl aspect-video border-0 rounded-lg shadow-xl"
                     />
                   ) : (
                     <video
                       src={filteredItems[selectedImageIndex].videoUrl}
                       controls
                       autoPlay
-                      className="max-w-full max-h-[56vh] sm:max-h-[64vh] w-auto h-auto object-contain rounded-lg"
+                      playsInline
+                      preload="metadata"
+                      className="max-w-full max-h-[56vh] sm:max-h-[64vh] w-auto h-auto object-contain rounded-lg shadow-xl"
                     />
                   )
                 ) : (
                   <img
                     src={filteredItems[selectedImageIndex].src}
                     alt={filteredItems[selectedImageIndex].title}
+                    onError={(e) => {
+                      e.currentTarget.src = latteArtImage;
+                    }}
                     className="max-w-full max-h-[56vh] sm:max-h-[64vh] w-auto h-auto object-contain select-none mx-auto rounded-lg shadow-md"
                     referrerPolicy="no-referrer"
                   />

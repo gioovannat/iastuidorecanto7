@@ -123,10 +123,13 @@ export const InfoModal: React.FC<InfoModalProps> = ({
 
               {/* Fachada Photo and caption */}
               <div className="rounded-xl overflow-hidden border border-[#DECFC0] bg-[#FAF6F0] mb-3">
-                <div className="aspect-square sm:aspect-16/10 max-h-[260px] sm:max-h-[290px] w-full overflow-hidden bg-[#241710] flex items-center justify-center">
+                <div className="aspect-square sm:aspect-[16/10] max-h-[260px] sm:max-h-[290px] w-full overflow-hidden bg-[#241710] flex items-center justify-center">
                   <img
                     src={currentFachada}
                     alt="Fachada do Recanto 7"
+                    onError={(e) => {
+                      e.currentTarget.src = defaultFachadaImage;
+                    }}
                     className="w-full h-full object-cover object-top sm:object-center"
                     referrerPolicy="no-referrer"
                   />

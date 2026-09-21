@@ -1,6 +1,7 @@
 import React from 'react';
 import { MessageCircle, MapPin, Clock, Instagram } from 'lucide-react';
 import { RECANTO_7_DATA } from '../data/cafeteriaData';
+import defaultLogo from '../assets/images/recanto_logo_custom.jpg';
 
 interface NavbarProps {
   logoSrc: string;
@@ -22,8 +23,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         <a href="#" className="flex items-center gap-3 group">
           <div className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden border border-[#D9C7B8] bg-white shadow-2xs group-hover:border-[#DCA028] transition-all p-1 shrink-0">
             <img
-              src={logoSrc}
+              src={logoSrc || defaultLogo}
               alt="Logo Recanto 7"
+              onError={(e) => {
+                e.currentTarget.src = defaultLogo;
+              }}
               className="max-w-full max-h-full w-auto h-auto object-contain select-none group-hover:scale-105 transition-transform duration-300"
               referrerPolicy="no-referrer"
             />

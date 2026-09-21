@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import { RECANTO_7_DATA } from '../data/cafeteriaData';
 import { getRecantoStatus, BusinessStatus } from '../utils/businessHours';
+import defaultLogo from '../assets/images/recanto_logo_custom.jpg';
+import heroCafeImageFallback from '../assets/images/recanto_hero_cafe_1789933102401.jpg';
 
 interface HeroSectionProps {
   logoSrc: string;
@@ -78,8 +80,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <div className="w-full h-full rounded-2xl p-1.5 bg-gradient-to-br from-[#F5D88C] via-[#E8D4C2] to-[#B89073] shadow-md hover:shadow-lg transition-shadow">
                   <div className="w-full h-full rounded-[14px] overflow-hidden bg-white flex items-center justify-center p-1.5 relative">
                     <img
-                      src={logoSrc}
+                      src={logoSrc || defaultLogo}
                       alt="Logotipo Oficial Recanto 7"
+                      loading="eager"
+                      onError={(e) => {
+                        e.currentTarget.src = defaultLogo;
+                      }}
                       className="max-w-full max-h-full w-auto h-auto object-contain select-none group-hover:scale-105 transition-transform duration-300"
                       referrerPolicy="no-referrer"
                     />
@@ -230,8 +236,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               
               <div className="relative rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3] xl:aspect-[5/4] shadow-inner bg-[#2C1D16] flex items-center justify-center">
                 <img
-                  src={heroImageSrc}
+                  src={heroImageSrc || heroCafeImageFallback}
                   alt="Ambiente aconchegante da Cafeteria Recanto 7 com café artesanal"
+                  loading="eager"
+                  decoding="async"
+                  onError={(e) => {
+                    e.currentTarget.src = heroCafeImageFallback;
+                  }}
                   className="w-full h-full object-cover object-center hover:scale-103 transition-transform duration-700"
                   referrerPolicy="no-referrer"
                 />
