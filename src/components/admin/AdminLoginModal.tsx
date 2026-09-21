@@ -17,7 +17,6 @@ import {
 import {
   verifyAdminLogin,
   resetAdminPasswordWithPin,
-  getAdminCredentials,
   setAdminAuthenticatedSession,
 } from '../../utils/siteContentStorage';
 
@@ -49,8 +48,6 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
   const [forgotSuccess, setForgotSuccess] = useState('');
 
   if (!isOpen) return null;
-
-  const currentCreds = getAdminCredentials();
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,12 +95,6 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
     } else {
       setForgotError(res.message);
     }
-  };
-
-  const fillDefaultCredentials = () => {
-    setEmail(currentCreds.email);
-    setPassword(currentCreds.passwordHash);
-    setLoginError('');
   };
 
   return (
@@ -236,22 +227,6 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
                   <Lock className="w-4 h-4" />
                   <span>Entrar no Painel</span>
                 </button>
-
-                {/* Buyer Quick Credentials Helper */}
-                <div className="pt-2 border-t border-[#E8DFD5] text-[11px] text-[#7A5442] bg-[#F7F1E8] p-3 rounded-xl flex items-start justify-between gap-2">
-                  <div>
-                    <span className="font-bold text-[#3B271E] block">Acesso Inicial do Comprador:</span>
-                    <span>E-mail: <code>admin@recanto7.com.br</code></span><br />
-                    <span>Senha: <code>admin123</code></span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={fillDefaultCredentials}
-                    className="shrink-0 px-2.5 py-1.5 rounded-lg bg-[#EFE4D5] hover:bg-[#E4D4C0] text-[#3B271E] font-bold text-[10px] cursor-pointer"
-                  >
-                    Preencher
-                  </button>
-                </div>
               </motion.form>
             ) : (
               <motion.form

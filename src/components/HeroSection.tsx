@@ -138,9 +138,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <MessageCircle className="w-3.5 h-3.5 fill-[#241710] text-[#241710]" />
                 </div>
                 <span>Fale no WhatsApp</span>
-                <span className="text-xs font-semibold opacity-85 hidden xl:inline">
-                  • {RECANTO_7_DATA.whatsappFormatted}
-                </span>
                 <ExternalLink className="w-3.5 h-3.5 ml-0.5 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </a>
 
@@ -222,16 +219,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           {/* Right Column: Visual Showcase & Atmosphere Card */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 28 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-5 relative"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-5 relative w-full flex flex-col justify-center pl-[3px] lg:ml-[66px] lg:mt-[61px]"
           >
             {/* Main Aesthetic Photo Frame */}
-            <div className="relative mx-auto max-w-md sm:max-w-xl lg:max-w-none rounded-3xl p-3 sm:p-4 bg-gradient-to-b from-[#F9F4EC] to-[#EFE6DC] border border-[#DECFC0] shadow-xl">
+            <div className="relative mx-auto w-full max-w-md sm:max-w-xl lg:max-w-none rounded-3xl p-3 sm:p-4 lg:p-4.5 bg-gradient-to-b from-[#FAF6F0] via-[#F4ECE3] to-[#EAE0D4] border border-[#DECFC0] shadow-xl">
               
-              <div className="relative rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[16/10] lg:aspect-[5/4] shadow-inner bg-[#2C1D16] flex items-center justify-center">
+              <div className="relative rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3] xl:aspect-[5/4] shadow-inner bg-[#2C1D16] flex items-center justify-center">
                 <img
                   src={heroImageSrc}
                   alt="Ambiente aconchegante da Cafeteria Recanto 7 com café artesanal"
@@ -243,7 +240,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-[#2F1D15]/85 via-transparent to-black/20 pointer-events-none" />
 
                 {/* Top Left Tag: Handcrafted Cozy Detail */}
-                <div className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-10 h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full bg-[#2C1D16]/85 backdrop-blur-md text-[#FAF6F0] text-[11px] sm:text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 sm:gap-2 shadow-md border border-white/15">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full bg-[#2C1D16]/85 backdrop-blur-md text-[#FAF6F0] text-[11px] sm:text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 sm:gap-2 shadow-md border border-white/20">
                   <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#E9B949] shrink-0" />
                   <span>
                     <span className="sm:hidden">Pausas com afeto</span>
@@ -252,7 +249,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </div>
 
                 {/* Top Right Tag: Fresh Coffee Badge */}
-                <div className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 z-10 h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full bg-[#FAF6F0]/92 backdrop-blur-md text-[#2C1D16] text-[11px] sm:text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 sm:gap-2 shadow-md border border-white/60">
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full bg-[#FAF6F0]/95 backdrop-blur-md text-[#2C1D16] text-[11px] sm:text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 sm:gap-2 shadow-md border border-white/60">
                   <span className="flex h-2 w-2 rounded-full bg-[#E9B949] animate-pulse shrink-0" />
                   <span>
                     <span className="sm:hidden">Café Especial</span>
@@ -261,16 +258,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </div>
 
                 {/* Floating Badge Bottom: Address & Map Action */}
-                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-10 flex items-center justify-between gap-3 p-3 rounded-xl backdrop-blur-md bg-[#FAF6F0]/95 border border-white/60 shadow-lg text-[#3B271E]">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-9 h-9 rounded-lg bg-[#F5EBE1] flex items-center justify-center text-[#B88114] shrink-0">
-                      <MapPin className="w-4 h-4" />
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-10 flex items-center justify-between gap-3 p-3 sm:p-3.5 lg:p-4 rounded-xl sm:rounded-2xl backdrop-blur-md bg-[#FAF6F0]/95 border border-white/70 shadow-lg text-[#3B271E]">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#F5EBE1] flex items-center justify-center text-[#B88114] shrink-0">
+                      <MapPin className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[11px] font-semibold text-[#8C6249] uppercase tracking-wider">
+                      <p className="text-[10px] sm:text-xs font-bold text-[#8C6249] uppercase tracking-wider">
                         Onde nos encontrar
                       </p>
-                      <p className="text-xs font-bold text-[#3B271E] truncate">
+                      <p className="text-xs sm:text-sm font-bold text-[#3B271E] truncate">
                         Maiobão • Paço do Lumiar
                       </p>
                     </div>
@@ -280,17 +277,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     href={RECANTO_7_DATA.mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#E9B949] hover:bg-[#DCA028] text-[#2C1D16] text-xs font-bold transition-colors cursor-pointer shrink-0 shadow-xs"
+                    className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#2C1D16] text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0 shadow-xs hover:shadow"
                   >
                     <span>Ver no Mapa</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
               </div>
             </div>
 
             {/* Quick Instagram callout underneath */}
-            <div className="mt-3 flex items-center justify-center gap-2 text-xs font-medium text-[#7A5442] text-center">
+            <div className="mt-3.5 flex items-center justify-center gap-2 text-xs sm:text-sm font-medium text-[#7A5442] text-center">
               <span>Acompanhe o dia a dia no Instagram:</span>
               <a
                 href={RECANTO_7_DATA.instagramUrl}
@@ -299,7 +296,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 className="font-bold text-[#3B271E] hover:text-[#C68B18] underline decoration-[#E9B949] underline-offset-2 inline-flex items-center gap-1"
               >
                 @recanto_7cafeteria
-                <ExternalLink className="w-3 h-3" />
+                <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           </motion.div>

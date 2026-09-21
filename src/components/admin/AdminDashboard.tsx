@@ -1016,7 +1016,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     Armazenamento em Arquivo para o GitHub
                   </h2>
                   <p className="text-xs sm:text-sm text-[#7A5442]">
-                    Total facilidade para o comprador manter a landing page versionada e atualizada no GitHub.
+                    Total facilidade para manter a landing page versionada e atualizada no GitHub.
                   </p>
                 </div>
               </div>
