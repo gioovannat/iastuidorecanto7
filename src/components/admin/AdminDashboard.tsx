@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Upload,
@@ -64,6 +64,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [activeTab, setActiveTab] = useState<'visual' | 'midia' | 'info' | 'github' | 'seguranca'>('midia');
   const [siteState, setSiteState] = useState<SiteConfig>(config);
   const [saveToast, setSaveToast] = useState(false);
+
+  // Mantém os cards alinhados com a configuração persistida carregada pelo App.
+  useEffect(() => {
+    setSiteState(config);
+  }, [config]);
   const [copiedJson, setCopiedJson] = useState(false);
 
   // Gallery item edit/create modal state
