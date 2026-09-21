@@ -16,7 +16,7 @@ export const RECANTO_7_DATA: CafeteriaInfo = {
   schedule: [
     { day: 'Segunda-feira', hours: 'Fechado para descanso', isOpenToday: false },
     { day: 'Terça-feira', hours: '07:30 às 11:00', isOpenToday: false },
-    { day: 'Quarta a Sábado', hours: '07:30 às 11:00 • 16:00 às 20:00', isOpenToday: false },
+    { day: 'Quarta a Sábado', hours: '07:30 às 11:00 • 15:00 às 18:30', isOpenToday: false },
     { day: 'Domingo', hours: '07:30 às 11:00', isOpenToday: false },
   ],
   notices: [
