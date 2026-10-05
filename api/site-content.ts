@@ -19,20 +19,27 @@ export default async function handler(request: Request): Promise<Response> {
       return Response.json({ error: 'Configuração inválida.' }, { status: 400 });
     }
 
-    const serialized = JSON.stringify(body.config);
-    const blob = await put(`site-content/recanto7-${Date.now()}.json`, serialized, {
-      access: 'public',
-      contentType: 'application/json',
-      addRandomSuffix: true,
-    });
-
-    await sql`
+    // O banco é a fonte oficial. Não deixe uma falha opcional no Blob impedir a publicação.
+    const rows = await sql`
       INSERT INTO public.site_content (id, config, version, updated_at)
       VALUES (${CONTENT_ID}, ${body.config}, 1, now())
       ON CONFLICT (id) DO UPDATE SET config = EXCLUDED.config, version = public.site_content.version + 1, updated_at = now()
+      RETURNING updated_at
     `;
 
-    return Response.json({ ok: true, url: blob.url });
+    let url: string | undefined;
+    try {
+      const blob = await put(`site-content/recanto7-${Date.now()}.json`, JSON.stringify(body.config), {
+        access: 'public',
+        contentType: 'application/json',
+        addRandomSuffix: true,
+      });
+      url = blob.url;
+    } catch (blobError) {
+      console.warn('[recanto7] Blob opcional indisponível; publicação no banco concluída.', blobError);
+    }
+
+    return Response.json({ ok: true, url, updatedAt: rows[0]?.updated_at });
   } catch (error) {
     console.error('[recanto7] Falha ao sincronizar conteúdo:', error);
     return Response.json({ error: 'Não foi possível publicar o conteúdo.' }, { status: 500 });
