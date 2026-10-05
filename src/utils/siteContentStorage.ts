@@ -1,4 +1,5 @@
 import { SiteConfig, GalleryMediaItem, AdminCredentials } from '../types';
+import { publishSiteConfig } from './siteContentSync';
 export type { SiteConfig, GalleryMediaItem, AdminCredentials };
 import defaultLogo from '../assets/images/recanto_logo_custom.jpg';
 import defaultFachada from '../assets/images/recanto_fachada_custom.png';
@@ -236,6 +237,9 @@ export function saveStoredSiteConfig(config: SiteConfig): boolean {
     ...config,
     lastUpdated: new Date().toISOString(),
   };
+
+  // Publica em segundo plano: o site continua funcionando mesmo se a API estiver indisponível.
+  publishSiteConfig(updated).catch(() => {});
 
   // 1. Asynchronously persist full data (including photos) to IndexedDB
   saveToIndexedDB(updated).catch((err) => {
