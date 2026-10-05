@@ -19,6 +19,7 @@ import {
   downloadConfigForGitHub,
   loadFromIndexedDB,
 } from './utils/siteContentStorage';
+import { loadPublishedSiteConfig } from './utils/siteContentSync';
 
 export default function App() {
   const [siteConfig, setSiteConfig] = useState<SiteConfig>(() => getStoredSiteConfig());
@@ -56,12 +57,16 @@ export default function App() {
     window.addEventListener('recanto7_content_updated', handleContentUpdate);
     window.addEventListener('recanto7_admin_auth_changed', handleAuthChange);
 
-    // Hydrate high-capacity storage from IndexedDB if available
+    // Primeiro usa o cache local para renderizar rápido; depois busca a versão publicada.
     loadFromIndexedDB()
       .then((idbConfig) => {
-        if (idbConfig) {
-          setSiteConfig(idbConfig);
-        }
+        if (idbConfig) setSiteConfig(idbConfig);
+      })
+      .catch(() => {});
+
+    loadPublishedSiteConfig()
+      .then((publishedConfig) => {
+        if (publishedConfig) setSiteConfig(publishedConfig);
       })
       .catch(() => {});
 
