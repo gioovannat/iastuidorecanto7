@@ -1,0 +1,166 @@
+{
+  "version": "1.2.0",
+  "lastUpdated": "2026-09-29T21:46:12.668Z",
+  "brand": {
+    "name": "Recanto 7",
+    "tagline": "Cafeteria ",
+    "subtagline": "Café e Cia",
+    "description": "Seu refúgio diário para saborear cafés especiais e delícias artesanais preparadas com afeto. Um ambiente calmo e acolhedor no Maiobão para desacelerar, conversar e apreciar os melhores momentos da vida.",
+    "whatsapp": "5598985353197",
+    "whatsappFormatted": "(98) 98535-3197",
+    "whatsappMessage": "Olá! Gostaria de saber mais sobre a cafeteria e as delícias do dia.",
+    "instagram": "@recanto_7cafeteria",
+    "instagramUrl": "https://www.instagram.com/recanto_7cafeteria",
+    "mapsUrl": "https://maps.google.com/?q=Recanto+7+Cafeteria+Maiobao+Paco+do+Lumiar",
+    "address": "Bairro Maiobão",
+    "neighborhood": "Maiobão",
+    "cityState": "Paço do Lumiar - MA"
+  },
+  "logo": {
+    "src": "/assets/recanto_logo_custom-CPxBe5ys.jpg",
+    "alt": "Logo Recanto 7 Café e Cia"
+  },
+  "fachada": {
+    "src": "/assets/recanto_fachada_custom-BMzNZL-e.png",
+    "caption": "Procure a fachada amarela",
+    "badgeText": "Fachada do Recanto 7"
+  },
+  "gallery": [
+    {
+      "id": "item-1790621963944",
+      "title": "Sanduíche Recanto 🤩😍",
+      "type": "image",
+      "category": "receitas",
+      "categoryLabel": "Receitas Frescas",
+      "description": "Sanduíche saboroso que você só encontra aqui no recanto 7 ! Opção barata para quem quer economizar , mas saborear um bom sanduíche 😍🤩",
+      "src": "/assets/gallery_item-1790621963944.jpg",
+      "videoUrl": "",
+      "thumbnailUrl": "",
+      "tag": "Mais pedidos "
+    },
+    {
+      "id": "item-1790621414155",
+      "title": "Tapioca com frango desfiado / carne seca 😍",
+      "type": "image",
+      "category": "receitas",
+      "categoryLabel": "Receitas Frescas",
+      "description": "Deliciosa tapioca recheada com frango desfiado ! Você pode turbinar com requeijão , ovo , queijo , presunto, calabresa ou bacon 🤩😍",
+      "src": "/assets/gallery_item-1790621414155.jpg",
+      "videoUrl": "",
+      "thumbnailUrl": "",
+      "tag": "Tapioca recheada "
+    },
+    {
+      "id": "item-1790547032300",
+      "title": "Chocolate cremoso 😍🍫",
+      "type": "image",
+      "category": "cafes",
+      "categoryLabel": "Cafés Especiais",
+      "description": "Chocolate saboroso feito com cacau, do tamanho da sua vontade ! Opções de 130 ou 240 ml 🤩😍",
+      "src": "/assets/gallery_item-1790547032300.jpg",
+      "videoUrl": "",
+      "thumbnailUrl": "",
+      "tag": "Quente/Gelado "
+    },
+    {
+      "id": "item-1790537818281",
+      "title": "Caseirinho de chocolate 🍫😍",
+      "type": "image",
+      "category": "receitas",
+      "categoryLabel": "Receitas Frescas",
+      "description": "Mini bolo de chocolate pra você se deliciar 😍🤩",
+      "src": "/assets/gallery_item-1790537818281.jpg",
+      "videoUrl": "",
+      "thumbnailUrl": "",
+      "tag": "Mais pedidos "
+    },
+    {
+      "id": "item-1790537714064",
+      "title": "Torta de carne de sol 😍",
+      "type": "image",
+      "category": "receitas",
+      "categoryLabel": "Receitas Frescas",
+      "description": "Deliciosa torta salgada de carne de sol, pra você saborear 🤩🤩",
+      "src": "/assets/gallery_item-1790537714064.jpg",
+      "videoUrl": "",
+      "thumbnailUrl": "",
+      "tag": "Mais pedidos "
+    },
+    {
+      "id": "item-1790537524302",
+      "title": "Torta de chocolate 🍫 ",
+      "type": "image",
+      "category": "receitas",
+      "categoryLabel": "Receitas Frescas",
+      "description": "Torta de chocolate pra você se deliciar!!! ",
+      "src": "/assets/gallery_item-1790537524302.jpg",
+      "videoUrl": "",
+      "thumbnailUrl": "",
+      "tag": "Top 1 "
+    },
+    {
+      "id": "item-1790537157469",
+      "title": "Chocolate quente especial recanto 😍",
+      "type": "image",
+      "category": "cafes",
+      "categoryLabel": "Cafés Especiais",
+      "description": "Delicioso chocolate com borda de avelã 😍",
+      "src": "/assets/gallery_item-1790537157469.jpg",
+      "videoUrl": "",
+      "thumbnailUrl": "",
+      "tag": "Novidade"
+    },
+    {
+      "id": "item-1790536711197",
+      "title": "Capuccino Cremoso 😍",
+      "type": "image",
+      "category": "cafes",
+      "categoryLabel": "Cafés Especiais",
+      "description": "Capuccino cremoso totalmente artesanal que você só encontra no recanto 7 😍",
+      "src": "/assets/gallery_item-1790536711197.jpg",
+      "videoUrl": "",
+      "thumbnailUrl": "",
+      "tag": "Opção econômica (130 ml ou 240 ml)"
+    },
+    {
+      "id": "item-1",
+      "title": "Café com leite + sanduíche recanto 🤩",
+      "type": "image",
+      "category": "cafes",
+      "categoryLabel": "Cafés Especiais",
+      "description": "Café com leite na temperatura perfeita  +  sanduíche recanto = combinação perfeita 😍 ",
+      "src": "/assets/gallery_item-1.jpg",
+      "tag": "Combinação Econômica "
+    },
+    {
+      "id": "item-2",
+      "title": "Fornadas Artesanais do Dia 🥟",
+      "type": "image",
+      "category": "receitas",
+      "categoryLabel": "Receitas Frescas",
+      "description": "Salgados folhados e quitutes dourados preparados frescos diariamente pela manhã e tarde 😍🤩Obs: consultar disponibilidade dia dia l. ",
+      "src": "/assets/gallery_item-2.jpg",
+      "tag": "Produção Diária"
+    },
+    {
+      "id": "item-4",
+      "title": "Espaço convidativo & acolhedor",
+      "type": "image",
+      "category": "espaco",
+      "categoryLabel": "Nosso Espaço",
+      "description": "Cantinhos pensados para quem quer ler um livro, trabalhar com calma ou quer ter uma conversa entre amigos 🤩👥",
+      "src": "/assets/gallery_item-4.jpg",
+      "tag": "Ambiente novo "
+    },
+    {
+      "id": "item-6",
+      "title": "Fachada Amarela do Recanto",
+      "type": "image",
+      "category": "espaco",
+      "categoryLabel": "Nosso Espaço",
+      "description": "Procure a fachada amarela no Maiobão! Nosso refúgio aconchegante com toldo listrado e ambiente acolhedor.",
+      "src": "/assets/recanto_fachada_custom-BMzNZL-e.png",
+      "tag": "Procure a Fachada Amarela"
+    }
+  ]
+}
