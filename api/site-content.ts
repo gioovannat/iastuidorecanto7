@@ -5,10 +5,19 @@ const sql = neon(process.env.DATABASE_URL!);
 const CONTENT_ID = 'recanto7-public-site';
 
 export default async function handler(request: Request): Promise<Response> {
+  if (!process.env.DATABASE_URL) {
+    return Response.json({ error: 'DATABASE_URL não configurada na hospedagem.' }, { status: 500 });
+  }
+
   if (request.method === 'GET') {
-    const rows = await sql`SELECT config, updated_at FROM public.site_content WHERE id = ${CONTENT_ID} LIMIT 1`;
-    if (!rows[0]) return Response.json({ config: null }, { status: 200 });
-    return Response.json({ config: rows[0].config, updatedAt: rows[0].updated_at });
+    try {
+      const rows = await sql`SELECT config, updated_at FROM public.site_content WHERE id = ${CONTENT_ID} LIMIT 1`;
+      if (!rows[0]) return Response.json({ config: null }, { status: 200 });
+      return Response.json({ config: rows[0].config, updatedAt: rows[0].updated_at });
+    } catch (error) {
+      console.error('[recanto7] Falha ao ler conteúdo:', error);
+      return Response.json({ error: 'Não foi possível ler o conteúdo publicado.' }, { status: 500 });
+    }
   }
 
   if (request.method !== 'POST') return new Response('Método não permitido', { status: 405 });
