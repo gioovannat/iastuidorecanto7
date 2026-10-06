@@ -18,6 +18,7 @@ import {
   setAdminAuthenticatedSession,
   downloadConfigForGitHub,
   loadFromIndexedDB,
+  saveToIndexedDB,
 } from './utils/siteContentStorage';
 import { loadPublishedSiteConfig } from './utils/siteContentSync';
 
@@ -57,18 +58,22 @@ export default function App() {
     window.addEventListener('recanto7_content_updated', handleContentUpdate);
     window.addEventListener('recanto7_admin_auth_changed', handleAuthChange);
 
-    // Primeiro usa o cache local para renderizar rápido; depois busca a versão publicada.
+    // O cache local melhora o primeiro paint, mas a publicação remota sempre vence.
+    // A ordem sequencial evita uma resposta tardia do IndexedDB sobrescrever o banco.
     loadFromIndexedDB()
       .then((idbConfig) => {
         if (idbConfig) setSiteConfig(idbConfig);
+        return loadPublishedSiteConfig();
       })
-      .catch(() => {});
-
-    loadPublishedSiteConfig()
       .then((publishedConfig) => {
-        if (publishedConfig) setSiteConfig(publishedConfig);
+        if (publishedConfig) {
+          setSiteConfig(publishedConfig);
+          void saveToIndexedDB(publishedConfig);
+        }
       })
-      .catch(() => {});
+      .catch(() => loadPublishedSiteConfig().then((publishedConfig) => {
+        if (publishedConfig) setSiteConfig(publishedConfig);
+      }).catch(() => {}));
 
     // Private Admin Router: detects #admin or /admin access
     const checkAdminRoute = () => {
