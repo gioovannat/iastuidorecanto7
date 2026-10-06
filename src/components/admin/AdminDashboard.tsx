@@ -64,11 +64,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [activeTab, setActiveTab] = useState<'visual' | 'midia' | 'info' | 'github' | 'seguranca'>('midia');
   const [siteState, setSiteState] = useState<SiteConfig>(config);
   const [saveToast, setSaveToast] = useState(false);
+  const [publishError, setPublishError] = useState<string | null>(null);
 
   // Mantém os cards alinhados com a configuração persistida carregada pelo App.
   useEffect(() => {
     setSiteState(config);
   }, [config]);
+
+  useEffect(() => {
+    const handlePublishFailure = (event: Event) => {
+      const detail = (event as CustomEvent<{ error?: string }>).detail;
+      setPublishError(detail?.error || 'Não foi possível publicar as alterações no servidor.');
+    };
+    window.addEventListener('recanto7_publish_failed', handlePublishFailure);
+    return () => window.removeEventListener('recanto7_publish_failed', handlePublishFailure);
+  }, []);
   const [copiedJson, setCopiedJson] = useState(false);
 
   // Gallery item edit/create modal state
@@ -92,6 +102,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [importError, setImportError] = useState('');
 
   const triggerSaveNotification = () => {
+    setPublishError(null);
     setSaveToast(true);
     setTimeout(() => setSaveToast(false), 2800);
   };
@@ -370,6 +381,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {publishError && (
+        <div role="alert" className="fixed top-5 left-5 right-5 sm:left-auto sm:max-w-md z-50 flex items-start gap-2.5 px-4 py-3 rounded-2xl bg-red-800 text-white text-xs font-semibold shadow-xl">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          <span>Alteração salva apenas neste dispositivo. Falha ao publicar no servidor: {publishError}</span>
+          <button type="button" onClick={() => setPublishError(null)} aria-label="Fechar alerta" className="ml-auto cursor-pointer">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Top Header of Admin Panel */}
       <header className="bg-[#FAF6F0] border-b border-[#DECFC0] sticky top-0 z-30 shadow-xs">

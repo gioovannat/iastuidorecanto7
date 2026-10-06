@@ -1,6 +1,6 @@
 import type { SiteConfig } from '../types';
 
-export async function publishSiteConfig(config: SiteConfig): Promise<{ ok: boolean; url?: string }> {
+export async function publishSiteConfig(config: SiteConfig): Promise<{ ok: boolean; url?: string; error?: string }> {
   try {
     const response = await fetch('/api/site-content', {
       method: 'POST',
@@ -8,13 +8,19 @@ export async function publishSiteConfig(config: SiteConfig): Promise<{ ok: boole
       cache: 'no-store',
       body: JSON.stringify({ config }),
     });
-    if (!response.ok) {
-      console.error('[v0] Publicação rejeitada:', response.status);
-      return { ok: false };
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.ok !== true) {
+      const error = data.error || `A API retornou HTTP ${response.status}.`;
+      console.error('[v0] Publicação rejeitada:', error);
+      window.dispatchEvent(new CustomEvent('recanto7_publish_failed', { detail: { error } }));
+      return { ok: false, error };
     }
-    return response.json();
-  } catch {
-    return { ok: false };
+    return data;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'API indisponível.';
+    console.error('[v0] Falha de rede ao publicar:', message);
+    window.dispatchEvent(new CustomEvent('recanto7_publish_failed', { detail: { error: message } }));
+    return { ok: false, error: message };
   }
 }
 
