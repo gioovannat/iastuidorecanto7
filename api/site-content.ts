@@ -1,13 +1,16 @@
 import { put } from '@vercel/blob';
 import { neon } from '@neondatabase/serverless';
 
-const sql = neon(process.env.DATABASE_URL!);
 const CONTENT_ID = 'recanto7-public-site';
 
-export default async function handler(request: Request): Promise<Response> {
+type VercelRequest = Request & { method: string };
+
+export default async function handler(request: VercelRequest): Promise<Response> {
   if (!process.env.DATABASE_URL) {
     return Response.json({ error: 'DATABASE_URL não configurada na hospedagem.' }, { status: 500 });
   }
+
+  const sql = neon(process.env.DATABASE_URL);
 
   if (request.method === 'GET') {
     try {
