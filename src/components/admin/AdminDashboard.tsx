@@ -38,6 +38,7 @@ import {
   saveAdminCredentials,
 } from '../../utils/siteContentStorage';
 import { optimizeImageFile } from '../../utils/imageOptimizer';
+import { uploadSiteImage } from '../../utils/siteContentSync';
 import defaultLogoImage from '../../assets/images/recanto_logo_custom.jpg';
 import defaultFachadaImage from '../../assets/images/recanto_fachada_custom.png';
 import defaultMediaFallback from '../../assets/images/recanto_gallery_item-1.jpg';
@@ -193,7 +194,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     triggerSaveNotification();
   };
 
-  const handleSaveMediaItem = (e: React.FormEvent) => {
+  const handleSaveMediaItem = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingItem) return;
 
@@ -1269,7 +1270,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                 maxHeight: 1280,
                                 quality: 0.82,
                               });
-                              setEditingItem({ ...editingItem, src: optimized });
+                              const blob = await fetch(optimized).then((response) => response.blob());
+                              const uploaded = await uploadSiteImage(new File([blob], file.name, { type: blob.type }));
+                              if (!uploaded.ok || !uploaded.url) {
+                                setMediaFormError(uploaded.error || 'Não foi possível enviar a foto para o servidor.');
+                                return;
+                              }
+                              setEditingItem({ ...editingItem, src: uploaded.url });
                             } catch (err) {
                               console.error('Falha ao processar foto:', err);
                             }

@@ -1,5 +1,20 @@
 import type { SiteConfig } from '../types';
 
+export async function uploadSiteImage(file: File): Promise<{ ok: boolean; url?: string; error?: string }> {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await fetch('/api/site-content', { method: 'POST', body: formData, cache: 'no-store' });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.ok !== true || !data.url) {
+      return { ok: false, error: data.error || `Falha no upload (HTTP ${response.status}).` };
+    }
+    return data;
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : 'API de imagens indisponível.' };
+  }
+}
+
 export async function publishSiteConfig(config: SiteConfig): Promise<{ ok: boolean; url?: string; error?: string }> {
   try {
     const response = await fetch('/api/site-content', {
