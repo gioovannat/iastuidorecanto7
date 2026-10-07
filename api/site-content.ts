@@ -5,10 +5,6 @@ const CONTENT_ID = 'recanto7-public-site';
 
 type VercelRequest = Request & { method: string };
 
-export const config = {
-  runtime: 'nodejs22.x',
-};
-
 export default async function handler(request: VercelRequest): Promise<Response> {
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: { Allow: 'GET, POST, OPTIONS' } });
