@@ -30,6 +30,23 @@ export default async function handler(request: VercelRequest): Promise<Response>
   if (request.method !== 'POST') return new Response('Método não permitido', { status: 405 });
 
   try {
+    const contentType = request.headers.get('content-type') || '';
+    if (contentType.includes('multipart/form-data')) {
+      const form = await request.formData();
+      const file = form.get('file');
+      if (!(file instanceof File) || !file.type.startsWith('image/')) {
+        return Response.json({ error: 'Envie um arquivo de imagem válido.' }, { status: 400 });
+      }
+      if (file.size > 8 * 1024 * 1024) {
+        return Response.json({ error: 'A imagem deve ter no máximo 8 MB.' }, { status: 413 });
+      }
+      const blob = await put(`site-content/media/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`, file, {
+        access: 'public',
+        addRandomSuffix: true,
+      });
+      return Response.json({ ok: true, url: blob.url });
+    }
+
     const body = await request.json();
     if (!body?.config || typeof body.config !== 'object') {
       return Response.json({ error: 'Configuração inválida.' }, { status: 400 });
