@@ -155,7 +155,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
                   <div>
                     <p className="font-bold text-[#3B271E]">Painel Exclusivo do Proprietário</p>
                     <p className="mt-0.5">
-                      Gerencie fotos, vídeos da cafeteria, logomarca e exporte suas atualizações diretamente para o GitHub.
+                      Gerencie fotos, vídeos da cafeteria, logomarca e salve suas atualizações com segurança.
                     </p>
                   </div>
                 </div>

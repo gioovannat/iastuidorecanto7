@@ -19,9 +19,6 @@ import {
   Instagram,
   ShieldCheck,
   KeyRound,
-  FileCode,
-  Github,
-  HelpCircle,
   Eye,
   X,
   ExternalLink,
@@ -36,9 +33,6 @@ import {
 } from '../../types';
 import {
   saveStoredSiteConfig,
-  downloadConfigForGitHub,
-  getPrettyConfigJson,
-  importConfigFromJson,
   resetStoredSiteConfig,
   getAdminCredentials,
   saveAdminCredentials,
@@ -61,7 +55,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onCloseToSite,
   onLogout,
 }) => {
-  const [activeTab, setActiveTab] = useState<'visual' | 'midia' | 'info' | 'github' | 'seguranca'>('midia');
+  const [activeTab, setActiveTab] = useState<'visual' | 'midia' | 'info' | 'seguranca'>('midia');
   const [siteState, setSiteState] = useState<SiteConfig>(config);
   const [saveToast, setSaveToast] = useState(false);
   const [publishError, setPublishError] = useState<string | null>(null);
@@ -79,7 +73,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     window.addEventListener('recanto7_publish_failed', handlePublishFailure);
     return () => window.removeEventListener('recanto7_publish_failed', handlePublishFailure);
   }, []);
-  const [copiedJson, setCopiedJson] = useState(false);
 
   // Gallery item edit/create modal state
   const [editingItem, setEditingItem] = useState<GalleryMediaItem | null>(null);
@@ -89,17 +82,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // Delete card modal state
   const [itemToDelete, setItemToDelete] = useState<GalleryMediaItem | null>(null);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
-  const [importSuccessMsg, setImportSuccessMsg] = useState('');
 
   // Credentials state
   const [creds, setCreds] = useState<AdminCredentials>(getAdminCredentials());
   const [credMessage, setCredMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  // Import JSON state
-  const [importJsonText, setImportJsonText] = useState('');
-  const [importError, setImportError] = useState('');
 
   const triggerSaveNotification = () => {
     setPublishError(null);
@@ -271,13 +259,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     triggerSaveNotification();
   };
 
-  /* -------------------------------------------------------------
-     GITHUB FILE EXPORT / IMPORT
-     ------------------------------------------------------------- */
-  const handleExportGitHub = () => {
-    downloadConfigForGitHub(siteState, 'recanto-site-content.json');
-  };
-
   const [copiedAdminLink, setCopiedAdminLink] = useState(false);
   const adminSecretUrl =
     typeof window !== 'undefined'
@@ -292,33 +273,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     } catch {
       setCopiedAdminLink(true);
       setTimeout(() => setCopiedAdminLink(false), 2500);
-    }
-  };
-
-  const handleCopyJson = () => {
-    const jsonStr = getPrettyConfigJson(siteState);
-    navigator.clipboard.writeText(jsonStr);
-    setCopiedJson(true);
-    setTimeout(() => setCopiedJson(false), 2500);
-  };
-
-  const handleImportJson = () => {
-    setImportError('');
-    setImportSuccessMsg('');
-    if (!importJsonText.trim()) {
-      setImportError('Cole o código JSON do seu arquivo.');
-      return;
-    }
-    const res = importConfigFromJson(importJsonText);
-    if (res.success && res.config) {
-      setSiteState(res.config);
-      onUpdateConfig(res.config);
-      triggerSaveNotification();
-      setImportJsonText('');
-      setImportSuccessMsg('Configuração importada e salva com sucesso do arquivo!');
-      setTimeout(() => setImportSuccessMsg(''), 4000);
-    } else {
-      setImportError(res.error || 'Erro ao importar arquivo JSON.');
     }
   };
 
@@ -418,15 +372,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           <div className="flex items-center gap-2 sm:gap-3">
             <button
-              onClick={handleExportGitHub}
-              title="Baixar arquivo JSON com as alterações para adicionar ao GitHub"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#241710] hover:bg-[#3D281D] text-[#E9B949] font-bold text-xs shadow-xs transition-colors cursor-pointer"
-            >
-              <Github className="w-4 h-4" />
-              <span>Exportar p/ GitHub</span>
-            </button>
-
-            <button
               onClick={onCloseToSite}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold text-xs shadow-xs transition-all cursor-pointer"
             >
@@ -483,18 +428,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           >
             <Clock className="w-4 h-4 text-[#E9B949]" />
             <span>Textos & Contatos</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('github')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
-              activeTab === 'github'
-                ? 'bg-[#3B271E] text-white shadow-xs'
-                : 'text-[#674433] hover:bg-[#EFE4D5]'
-            }`}
-          >
-            <Github className="w-4 h-4 text-[#E9B949]" />
-            <span>Salvar no GitHub (.json)</span>
           </button>
 
           <button
@@ -1040,144 +973,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         )}
 
         {/* =========================================================
-            TAB 4: GITHUB FILE EXPORT & SYNC
-            ========================================================= */}
-        {activeTab === 'github' && (
-          <div className="space-y-8">
-            <div className="bg-[#FAF6F0] p-6 sm:p-8 rounded-3xl border border-[#DECFC0] shadow-xs">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#241710] text-[#E9B949] flex items-center justify-center shadow-xs">
-                  <Github className="w-6 h-6" />
-                </div>
-                <div>
-                  <h2 className="font-serif-display text-xl font-bold text-[#3B271E]">
-                    Armazenamento em Arquivo para o GitHub
-                  </h2>
-                  <p className="text-xs sm:text-sm text-[#7A5442]">
-                    Total facilidade para manter a landing page versionada e atualizada no GitHub.
-                  </p>
-                </div>
-              </div>
-
-              {/* Step by step guide */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-                <div className="p-4 rounded-2xl bg-[#F5EDE3] border border-[#E4D6C6]">
-                  <span className="w-6 h-6 rounded-full bg-[#E9B949] text-[#241710] font-bold text-xs flex items-center justify-center mb-2">
-                    1
-                  </span>
-                  <h3 className="font-bold text-xs sm:text-sm text-[#3B271E] mb-1">
-                    Baixe o Arquivo
-                  </h3>
-                  <p className="text-xs text-[#674433] leading-relaxed">
-                    Clique no botão abaixo para baixar o arquivo <code>recanto-site-content.json</code> com todas as suas fotos, vídeos e edições.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-[#F5EDE3] border border-[#E4D6C6]">
-                  <span className="w-6 h-6 rounded-full bg-[#E9B949] text-[#241710] font-bold text-xs flex items-center justify-center mb-2">
-                    2
-                  </span>
-                  <h3 className="font-bold text-xs sm:text-sm text-[#3B271E] mb-1">
-                    Envie para o GitHub
-                  </h3>
-                  <p className="text-xs text-[#674433] leading-relaxed">
-                    No seu repositório no GitHub, faça o upload ou commit do arquivo JSON. Ele preserva todo o histórico de alterações.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-[#F5EDE3] border border-[#E4D6C6]">
-                  <span className="w-6 h-6 rounded-full bg-[#E9B949] text-[#241710] font-bold text-xs flex items-center justify-center mb-2">
-                    3
-                  </span>
-                  <h3 className="font-bold text-xs sm:text-sm text-[#3B271E] mb-1">
-                    Publicação Automática
-                  </h3>
-                  <p className="text-xs text-[#674433] leading-relaxed">
-                    A página hospedada no Vercel, Netlify ou GitHub Pages carrega as novidades imediatamente, sem depender de banco de dados externo.
-                  </p>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-[#E8DFD5]">
-                <button
-                  onClick={handleExportGitHub}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-[#241710] hover:bg-[#3D281D] text-[#E9B949] font-bold text-sm shadow-md transition-all cursor-pointer"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Baixar recanto-site-content.json</span>
-                </button>
-
-                <button
-                  onClick={handleCopyJson}
-                  className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl border border-[#D9C7B8] bg-[#F7F1E8] hover:bg-[#EFE5D8] text-[#3B271E] font-bold text-xs transition-colors cursor-pointer"
-                >
-                  {copiedJson ? (
-                    <>
-                      <Check className="w-4 h-4 text-emerald-700" />
-                      <span className="text-emerald-800">Copiado com sucesso!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-4 h-4 text-[#8C6249]" />
-                      <span>Copiar Código JSON</span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  onClick={handleResetFactory}
-                  className="inline-flex items-center gap-1.5 px-4 py-3.5 rounded-2xl text-red-700 hover:bg-red-50 text-xs font-bold transition-colors ml-auto cursor-pointer"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Restaurar Padrões de Fábrica</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Import JSON Section */}
-            <div className="bg-[#FAF6F0] p-6 sm:p-8 rounded-3xl border border-[#DECFC0] shadow-xs">
-              <h3 className="font-serif-display text-lg font-bold text-[#3B271E] mb-2">
-                Importar Arquivo JSON do GitHub
-              </h3>
-              <p className="text-xs text-[#7A5442] mb-4">
-                Se você baixou um arquivo JSON do repositório ou quer carregar em outro computador, cole o conteúdo abaixo:
-              </p>
-
-              {importSuccessMsg && (
-                <div className="p-3 mb-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
-                  <Check className="w-4 h-4 shrink-0 text-emerald-600" />
-                  <span>{importSuccessMsg}</span>
-                </div>
-              )}
-
-              {importError && (
-                <div className="p-3 mb-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{importError}</span>
-                </div>
-              )}
-
-              <textarea
-                rows={4}
-                value={importJsonText}
-                onChange={(e) => setImportJsonText(e.target.value)}
-                placeholder='Cole o conteúdo do arquivo recanto-site-content.json aqui...'
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#D9C7B8] text-xs font-mono text-[#3B271E] mb-3"
-              />
-
-              <button
-                onClick={handleImportJson}
-                className="px-5 py-2.5 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold text-xs shadow-xs"
-              >
-                Carregar Configurações do JSON
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* =========================================================
-            TAB 5: SEGURANÇA & SENHA
+            TAB 4: SEGURANÇA & SENHA
             ========================================================= */}
         {activeTab === 'seguranca' && (
           <div className="bg-[#FAF6F0] p-6 sm:p-8 rounded-3xl border border-[#DECFC0] shadow-xs max-w-2xl mx-auto">
@@ -1283,6 +1079,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </button>
               </div>
             </form>
+
+            {/* Restauração / Padrões de Fábrica */}
+            <div className="mt-8 pt-6 border-t border-[#DECFC0] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xs font-bold text-[#3B271E]">Restaurar Padrões de Fábrica</h3>
+                <p className="text-[11px] text-[#7A5442]">Restaura fotos, vídeos e textos para a configuração original da cafeteria.</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleResetFactory}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition-colors cursor-pointer shrink-0"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Restaurar Fábrica</span>
+              </button>
+            </div>
           </div>
         )}
       </main>

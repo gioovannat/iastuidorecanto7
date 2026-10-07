@@ -1,17 +1,15 @@
 import React from 'react';
-import { ShieldCheck, LayoutDashboard, Eye, Download, LogOut, Sparkles } from 'lucide-react';
+import { ShieldCheck, LayoutDashboard, Eye, LogOut } from 'lucide-react';
 
 interface AdminBarProps {
   currentView: 'site' | 'admin';
   onToggleView: () => void;
-  onExportGitHub: () => void;
   onLogout: () => void;
 }
 
 export const AdminBar: React.FC<AdminBarProps> = ({
   currentView,
   onToggleView,
-  onExportGitHub,
   onLogout,
 }) => {
   return (
@@ -51,15 +49,6 @@ export const AdminBar: React.FC<AdminBarProps> = ({
                 <span>Ver Site (Visitante)</span>
               </>
             )}
-          </button>
-
-          <button
-            onClick={onExportGitHub}
-            title="Baixar arquivo JSON com todas as fotos, vídeos e textos para salvar no GitHub"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold transition-all shadow-2xs cursor-pointer"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Exportar p/ GitHub</span>
           </button>
 
           <button

@@ -16,7 +16,6 @@ import {
   getStoredSiteConfig,
   isUserAdminAuthenticated,
   setAdminAuthenticatedSession,
-  downloadConfigForGitHub,
   loadFromIndexedDB,
   saveToIndexedDB,
 } from './utils/siteContentStorage';
@@ -160,10 +159,6 @@ export default function App() {
     }
   };
 
-  const handleExportGitHub = () => {
-    downloadConfigForGitHub(siteConfig, 'recanto-site-content.json');
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#3D2C24] font-sans-body selection:bg-[#E9B949]/30 selection:text-[#241710]">
       {/* Top Admin Status Bar ONLY visible when administrator is actively logged in */}
@@ -173,7 +168,6 @@ export default function App() {
           onToggleView={() =>
             setCurrentView((prev) => (prev === 'admin' ? 'site' : 'admin'))
           }
-          onExportGitHub={handleExportGitHub}
           onLogout={handleLogout}
         />
       )}
