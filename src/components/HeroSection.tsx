@@ -9,7 +9,7 @@ import {
   Heart,
   ExternalLink,
 } from 'lucide-react';
-import { RECANTO_7_DATA } from '../data/cafeteriaData';
+import type { SiteConfig } from '../types';
 import { getRecantoStatus, BusinessStatus } from '../utils/businessHours';
 import defaultLogo from '../assets/images/recanto_logo_custom.jpg';
 import heroCafeImageFallback from '../assets/images/recanto_hero_cafe_1789933102401.jpg';
@@ -17,12 +17,14 @@ import heroCafeImageFallback from '../assets/images/recanto_hero_cafe_1789933102
 interface HeroSectionProps {
   logoSrc: string;
   heroImageSrc: string;
+  brand: SiteConfig['brand'];
   onOpenSchedule: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   logoSrc,
   heroImageSrc,
+  brand,
   onOpenSchedule,
 }) => {
   const [businessStatus, setBusinessStatus] = useState<BusinessStatus>(() => getRecantoStatus());
@@ -35,8 +37,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     return () => clearInterval(interval);
   }, []);
 
-  const whatsappDirectUrl = `https://wa.me/${RECANTO_7_DATA.whatsapp}?text=${encodeURIComponent(
-    RECANTO_7_DATA.whatsappMessage
+  const whatsappDirectUrl = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(
+    brand.whatsappMessage
   )}`;
 
   return (
@@ -62,7 +64,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F3EBE1] border border-[#E3D3C2] text-xs font-semibold text-[#674433] mb-6 shadow-2xs"
             >
               <span className="w-2 h-2 rounded-full bg-[#E9B949] animate-pulse" />
-              <span>Bairro Maiobão • Paço do Lumiar, MA</span>
+              <span>{brand.address} • {brand.cityState}</span>
               <span className="text-[#C8B8A6]">•</span>
               <span className="text-[#8C6249]">Cafeteria</span>
             </motion.div>
@@ -103,11 +105,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   Bem-vindo ao
                 </span>
                 <h1 className="font-serif-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#3B271E] leading-[1.08]">
-                  Recanto <span className="text-[#C68B18] italic font-normal font-serif-display">7</span>
+                  {brand.name}
                 </h1>
                 <p className="text-sm sm:text-base font-medium text-[#7A5442] mt-1 flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-[#DCA028]" />
-                  <span>{RECANTO_7_DATA.tagline}</span>
+                  <span>{brand.tagline}</span>
                 </p>
               </div>
             </motion.div>
@@ -120,7 +122,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               transition={{ duration: 0.65, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="text-base sm:text-lg text-[#553C30] leading-relaxed max-w-2xl mb-8"
             >
-              {RECANTO_7_DATA.description}
+              {brand.description}
             </motion.p>
 
             {/* WhatsApp CTA Action Group */}
@@ -137,7 +139,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 id="hero-whatsapp-button"
-                title={`Fale no WhatsApp: ${RECANTO_7_DATA.whatsappFormatted}`}
+                title={`Fale no WhatsApp: ${brand.whatsappFormatted}`}
                 className="group relative inline-flex items-center justify-center gap-2.5 px-5 h-12 rounded-xl bg-gradient-to-r from-[#E9B949] via-[#E2AF3C] to-[#DCA028] hover:from-[#DFAC3A] hover:to-[#CF951E] text-[#241710] font-bold text-sm shadow-xs hover:shadow transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap"
               >
                 <div className="w-6 h-6 rounded-full bg-[#241710]/10 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
@@ -285,7 +287,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   </div>
 
                   <a
-                    href={RECANTO_7_DATA.mapsUrl}
+                    href={brand.mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#2C1D16] text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0 shadow-xs hover:shadow"
@@ -301,7 +303,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="mt-3.5 flex items-center justify-center gap-2 text-xs sm:text-sm font-medium text-[#7A5442] text-center">
               <span>Acompanhe o dia a dia no Instagram:</span>
               <a
-                href={RECANTO_7_DATA.instagramUrl}
+                href={brand.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-bold text-[#3B271E] hover:text-[#C68B18] underline decoration-[#E9B949] underline-offset-2 inline-flex items-center gap-1"

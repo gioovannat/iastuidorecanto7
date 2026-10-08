@@ -11,6 +11,7 @@ import {
   X,
 } from 'lucide-react';
 import { RECANTO_7_DATA } from '../data/cafeteriaData';
+import type { SiteConfig } from '../types';
 import defaultFachadaImage from '../assets/images/fachada_amarela_1789934046294.jpg';
 import { getRecantoStatus, BusinessStatus } from '../utils/businessHours';
 
@@ -18,18 +19,20 @@ export interface ScheduleSectionProps {
   fachadaSrc?: string;
   fachadaCaption?: string;
   fachadaBadgeText?: string;
+  brand: SiteConfig['brand'];
 }
 
 export const ScheduleSection: React.FC<ScheduleSectionProps> = ({
   fachadaSrc = defaultFachadaImage,
   fachadaCaption = 'Procure a fachada amarela',
   fachadaBadgeText = 'Fachada do Recanto 7',
+  brand,
 }) => {
   const [isPhotoOpen, setIsPhotoOpen] = useState(false);
   const [businessStatus, setBusinessStatus] = useState<BusinessStatus>(() => getRecantoStatus());
 
-  const whatsappDirectUrl = `https://wa.me/${RECANTO_7_DATA.whatsapp}?text=${encodeURIComponent(
-    RECANTO_7_DATA.whatsappMessage
+  const whatsappDirectUrl = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(
+    brand.whatsappMessage
   )}`;
 
   return (
@@ -160,12 +163,12 @@ export const ScheduleSection: React.FC<ScheduleSectionProps> = ({
                     <h3 className="font-serif-display text-lg font-bold text-[#3B271E]">
                       Onde Encontrar
                     </h3>
-                    <p className="text-xs text-[#7A5442]">Bairro Maiobão • Paço do Lumiar</p>
+                    <p className="text-xs text-[#7A5442]">{brand.address} • {brand.cityState}</p>
                   </div>
                 </div>
 
                 <p className="text-sm text-[#553C30] leading-relaxed mb-4">
-                  Venha nos fazer uma visita no <strong>Maiobão</strong>, em <strong>Paço do Lumiar - MA</strong>. Um refúgio aconchegante para a sua pausa do dia.
+                  Venha nos fazer uma visita no <strong>{brand.address}</strong>, em <strong>{brand.cityState}</strong>. Um refúgio aconchegante para a sua pausa do dia.
                 </p>
 
                 {/* Fachada do Estabelecimento com Foto e Legenda */}
@@ -228,7 +231,7 @@ export const ScheduleSection: React.FC<ScheduleSectionProps> = ({
               </div>
 
               <a
-                href={RECANTO_7_DATA.mapsUrl}
+                href={brand.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl border border-[#D9C7B8] bg-[#F7F1E8] hover:bg-[#EFE5D8] text-[#3B271E] font-bold text-sm transition-all shadow-2xs hover:shadow-xs"
@@ -333,7 +336,7 @@ export const ScheduleSection: React.FC<ScheduleSectionProps> = ({
                 </div>
 
                 <a
-                  href={RECANTO_7_DATA.mapsUrl}
+                  href={brand.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold text-xs shadow-xs"

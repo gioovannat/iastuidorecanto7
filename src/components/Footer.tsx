@@ -1,16 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Heart, MessageCircle, MapPin, Instagram } from 'lucide-react';
-import { RECANTO_7_DATA } from '../data/cafeteriaData';
+import type { SiteConfig } from '../types';
 
 interface FooterProps {
+  brand: SiteConfig['brand'];
   onOpenSchedule: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenSchedule }) => {
+export const Footer: React.FC<FooterProps> = ({ brand, onOpenSchedule }) => {
   const currentYear = new Date().getFullYear();
-  const whatsappUrl = `https://wa.me/${RECANTO_7_DATA.whatsapp}?text=${encodeURIComponent(
-    RECANTO_7_DATA.whatsappMessage
+  const whatsappUrl = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(
+    brand.whatsappMessage
   )}`;
 
   return (
@@ -26,10 +27,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSchedule }) => {
           {/* Brand info */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <span className="font-serif-display text-xl font-bold text-[#3B271E]">
-              Recanto 7
+              {brand.name}
             </span>
             <span className="text-xs text-[#7A5442] mt-0.5">
-              Cafeteria Artesanal • Maiobão, Paço do Lumiar - MA
+              {brand.tagline} • {brand.address}, {brand.cityState}
             </span>
           </div>
 
@@ -50,7 +51,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSchedule }) => {
             </button>
             <span className="text-[#D9C7B8]">•</span>
             <a
-              href={RECANTO_7_DATA.mapsUrl}
+              href={brand.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-[#674433] hover:text-[#3B271E] transition-colors"
@@ -60,7 +61,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSchedule }) => {
             </a>
             <span className="text-[#D9C7B8]">•</span>
             <a
-              href={RECANTO_7_DATA.instagramUrl}
+              href={brand.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-[#674433] hover:text-[#3B271E] transition-colors"
@@ -76,14 +77,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSchedule }) => {
               className="flex items-center gap-1 text-[#3B271E] font-bold transition-colors"
             >
               <MessageCircle className="w-3.5 h-3.5 text-[#C68B18]" />
-              <span>{RECANTO_7_DATA.whatsappFormatted}</span>
+              <span>{brand.whatsappFormatted}</span>
             </a>
           </div>
         </div>
 
         {/* Bottom copyright line */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-[#8C6249] gap-3">
-          <p>© {currentYear} Recanto 7 Cafeteria. Todos os direitos reservados.</p>
+          <p>© {currentYear} {brand.name}. Todos os direitos reservados.</p>
 
           <p className="flex items-center gap-1">
             <span>Feito com</span>

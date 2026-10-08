@@ -213,6 +213,7 @@ export default function App() {
           {/* Top Navigation - Completely free of admin links */}
           <Navbar
             logoSrc={siteConfig.logo.src}
+            brand={siteConfig.brand}
             onOpenSchedule={() => setIsScheduleOpen(true)}
           />
 
@@ -221,24 +222,26 @@ export default function App() {
             <HeroSection
               logoSrc={siteConfig.logo.src}
               heroImageSrc={heroCafeImage}
+              brand={siteConfig.brand}
               onOpenSchedule={() => setIsScheduleOpen(true)}
             />
 
             <ExperienceSection />
 
             <div id="galeria">
-              <GallerySection items={siteConfig.gallery} />
+              <GallerySection items={siteConfig.gallery} brand={siteConfig.brand} />
             </div>
 
             <ScheduleSection
               fachadaSrc={siteConfig.fachada.src}
               fachadaCaption={siteConfig.fachada.caption}
               fachadaBadgeText={siteConfig.fachada.badgeText}
+              brand={siteConfig.brand}
             />
           </main>
 
           {/* Bottom Footer - Completely free of admin links */}
-          <Footer onOpenSchedule={() => setIsScheduleOpen(true)} />
+          <Footer brand={siteConfig.brand} onOpenSchedule={() => setIsScheduleOpen(true)} />
         </>
       )}
 
@@ -246,6 +249,7 @@ export default function App() {
       <InfoModal
         isOpen={isScheduleOpen}
         onClose={() => setIsScheduleOpen(false)}
+        brand={siteConfig.brand}
         fachadaSrc={siteConfig.fachada.src}
         fachadaCaption={siteConfig.fachada.caption}
       />

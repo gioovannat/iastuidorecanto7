@@ -20,7 +20,7 @@ import interiorImage from '../assets/images/recanto_interior_1789933549590.jpg';
 import cakesImage from '../assets/images/recanto_cakes_1789933561227.jpg';
 import fachadaImage from '../assets/images/fachada_amarela_1789934046294.jpg';
 import { RECANTO_7_DATA } from '../data/cafeteriaData';
-import { GalleryMediaItem } from '../types';
+import type { GalleryMediaItem, SiteConfig } from '../types';
 
 /**
  * Robust YouTube Embed URL builder that supports standard, short, mobile and embed links.
@@ -43,9 +43,10 @@ function getYouTubeEmbedUrl(url?: string): string | null {
 
 interface GallerySectionProps {
   items?: GalleryMediaItem[];
+  brand: SiteConfig['brand'];
 }
 
-export const GallerySection: React.FC<GallerySectionProps> = ({ items }) => {
+export const GallerySection: React.FC<GallerySectionProps> = ({ items, brand }) => {
   const [activeCategory, setActiveCategory] = useState<'todos' | 'cafes' | 'receitas' | 'espaco'>('todos');
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
@@ -150,7 +151,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ items }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedImageIndex, showNext, showPrev]);
 
-  const whatsappDirectUrl = `https://wa.me/${RECANTO_7_DATA.whatsapp}?text=${encodeURIComponent(
+  const whatsappDirectUrl = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(
     'Olá! Vi as fotos da galeria do Recanto 7 e gostaria de saber as opções disponíveis hoje.'
   )}`;
 

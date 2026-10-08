@@ -1,19 +1,21 @@
 import React from 'react';
 import { MessageCircle, MapPin, Clock, Instagram } from 'lucide-react';
-import { RECANTO_7_DATA } from '../data/cafeteriaData';
+import type { SiteConfig } from '../types';
 import defaultLogo from '../assets/images/recanto_logo_custom.jpg';
 
 interface NavbarProps {
   logoSrc: string;
+  brand: SiteConfig['brand'];
   onOpenSchedule: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   logoSrc,
+  brand,
   onOpenSchedule,
 }) => {
-  const whatsappUrl = `https://wa.me/${RECANTO_7_DATA.whatsapp}?text=${encodeURIComponent(
-    RECANTO_7_DATA.whatsappMessage
+  const whatsappUrl = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(
+    brand.whatsappMessage
   )}`;
 
   return (
@@ -35,10 +37,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <div className="flex flex-col">
             <span className="font-serif-display text-2xl font-bold tracking-tight text-[#3B271E] leading-none">
-              Recanto 7
+              {brand.name}
             </span>
             <span className="text-xs font-medium text-[#7A5442] tracking-wider uppercase mt-1">
-              Café e Cia
+              {brand.subtagline}
             </span>
           </div>
         </a>
@@ -47,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="hidden md:flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#F3EBE1] border border-[#E4D6C6] text-xs font-medium text-[#674433]">
           <span className="flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 text-[#C68B18]" />
-            Maiobão, Paço do Lumiar
+            {brand.address}, {brand.cityState}
           </span>
           <span className="text-[#C8B8A6]">•</span>
           <a
@@ -69,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Right CTA */}
         <div className="flex items-center gap-2 sm:gap-3">
           <a
-            href={RECANTO_7_DATA.instagramUrl}
+            href={brand.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
             title="Siga no Instagram @recanto_7cafeteria"

@@ -2,12 +2,14 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Clock, MapPin, AlertCircle, ExternalLink, MessageCircle } from 'lucide-react';
 import { RECANTO_7_DATA } from '../data/cafeteriaData';
+import type { SiteConfig } from '../types';
 import defaultFachadaImage from '../assets/images/fachada_amarela_1789934046294.jpg';
 import { getRecantoStatus } from '../utils/businessHours';
 
 interface InfoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  brand: SiteConfig['brand'];
   fachadaSrc?: string;
   fachadaCaption?: string;
 }
@@ -15,6 +17,7 @@ interface InfoModalProps {
 export const InfoModal: React.FC<InfoModalProps> = ({
   isOpen,
   onClose,
+  brand,
   fachadaSrc,
   fachadaCaption,
 }) => {
@@ -24,8 +27,8 @@ export const InfoModal: React.FC<InfoModalProps> = ({
   const currentFachada = fachadaSrc || defaultFachadaImage;
   const currentCaption = fachadaCaption || 'Procure a fachada amarela';
 
-  const whatsappDirectUrl = `https://wa.me/${RECANTO_7_DATA.whatsapp}?text=${encodeURIComponent(
-    RECANTO_7_DATA.whatsappMessage
+  const whatsappDirectUrl = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(
+    brand.whatsappMessage
   )}`;
 
   return (
@@ -58,7 +61,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({
                 <h3 className="font-serif-display text-lg font-bold text-[#3B271E]">
                   Horários & Informações
                 </h3>
-                <p className="text-xs text-[#7A5442]">Recanto 7 • Cafeteria Artesanal</p>
+                <p className="text-xs text-[#7A5442]">{brand.name} • {brand.tagline}</p>
               </div>
             </div>
 
@@ -150,7 +153,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({
                   </p>
                 </div>
                 <a
-                  href={RECANTO_7_DATA.mapsUrl}
+                  href={brand.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#E9B949] hover:bg-[#DCA028] text-[#2C1D16] text-xs font-bold transition-colors cursor-pointer"
@@ -190,7 +193,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#E9B949] hover:bg-[#DCA028] text-[#2C1D16] text-xs font-bold transition-colors cursor-pointer"
             >
               <MessageCircle className="w-4 h-4 fill-[#2C1D16]" />
-              <span>Chamar {RECANTO_7_DATA.whatsappFormatted}</span>
+              <span>Chamar {brand.whatsappFormatted}</span>
             </a>
           </div>
         </motion.div>

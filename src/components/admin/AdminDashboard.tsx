@@ -38,7 +38,7 @@ import {
   saveAdminCredentials,
 } from '../../utils/siteContentStorage';
 import { optimizeImageFile } from '../../utils/imageOptimizer';
-import { uploadSiteImage } from '../../utils/siteContentSync';
+import { publishSiteConfig, uploadSiteImage } from '../../utils/siteContentSync';
 import defaultLogoImage from '../../assets/images/recanto_logo_custom.jpg';
 import defaultFachadaImage from '../../assets/images/recanto_fachada_custom.png';
 import defaultMediaFallback from '../../assets/images/recanto_gallery_item-1.jpg';
@@ -60,6 +60,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [siteState, setSiteState] = useState<SiteConfig>(config);
   const [saveToast, setSaveToast] = useState(false);
   const [publishError, setPublishError] = useState<string | null>(null);
+  const [isPublishing, setIsPublishing] = useState(false);
 
   // Mantém os cards alinhados com a configuração persistida carregada pelo App.
   useEffect(() => {
@@ -96,12 +97,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setTimeout(() => setSaveToast(false), 2800);
   };
 
-  const handleSaveAll = () => {
-    const success = saveStoredSiteConfig(siteState);
-    if (success) {
-      onUpdateConfig(siteState);
-      triggerSaveNotification();
+  const handleSaveAll = async () => {
+    setPublishError(null);
+    setIsPublishing(true);
+    const result = await publishSiteConfig(siteState);
+    setIsPublishing(false);
+    if (!result.ok) {
+      setPublishError(result.error || 'Não foi possível salvar no Supabase.');
+      return;
     }
+    saveStoredSiteConfig(siteState);
+    onUpdateConfig(siteState);
+    triggerSaveNotification();
   };
 
   /* -------------------------------------------------------------
@@ -823,7 +830,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold text-xs shadow-xs"
               >
                 <Save className="w-4 h-4" />
-                <span>Salvar Textos</span>
+                <span>{isPublishing ? 'Salvando...' : 'Salvar Textos'}</span>
               </button>
             </div>
 
@@ -839,6 +846,74 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     setSiteState({
                       ...siteState,
                       brand: { ...siteState.brand, name: e.target.value },
+                    })
+                  }
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#D9C7B8] text-sm text-[#3B271E]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#4A3326] mb-1.5">
+                  Link do Instagram
+                </label>
+                <input
+                  type="url"
+                  value={siteState.brand.instagramUrl}
+                  onChange={(e) =>
+                    setSiteState({
+                      ...siteState,
+                      brand: { ...siteState.brand, instagramUrl: e.target.value },
+                    })
+                  }
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#D9C7B8] text-sm text-[#3B271E]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#4A3326] mb-1.5">
+                  Link do Google Maps
+                </label>
+                <input
+                  type="url"
+                  value={siteState.brand.mapsUrl}
+                  onChange={(e) =>
+                    setSiteState({
+                      ...siteState,
+                      brand: { ...siteState.brand, mapsUrl: e.target.value },
+                    })
+                  }
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#D9C7B8] text-sm text-[#3B271E]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#4A3326] mb-1.5">
+                  Bairro / Endereço
+                </label>
+                <input
+                  type="text"
+                  value={siteState.brand.address}
+                  onChange={(e) =>
+                    setSiteState({
+                      ...siteState,
+                      brand: { ...siteState.brand, address: e.target.value },
+                    })
+                  }
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#D9C7B8] text-sm text-[#3B271E]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#4A3326] mb-1.5">
+                  Cidade / Estado
+                </label>
+                <input
+                  type="text"
+                  value={siteState.brand.cityState}
+                  onChange={(e) =>
+                    setSiteState({
+                      ...siteState,
+                      brand: { ...siteState.brand, cityState: e.target.value },
                     })
                   }
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#D9C7B8] text-sm text-[#3B271E]"
@@ -971,7 +1046,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#E9B949] hover:bg-[#DCA028] text-[#241710] font-bold text-sm shadow-xs"
               >
                 <Save className="w-4 h-4" />
-                <span>Salvar Todas as Alterações</span>
+                <span>{isPublishing ? 'Salvando...' : 'Salvar Todas as Alterações'}</span>
               </button>
             </div>
           </div>
