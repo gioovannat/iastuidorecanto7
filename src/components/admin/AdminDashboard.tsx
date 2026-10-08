@@ -116,9 +116,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           maxHeight: 512,
           quality: 0.85,
         });
+        const uploaded = await uploadSiteImage(new File([await (await fetch(optimized)).blob()], file.name, { type: file.type }));
+        if (!uploaded.ok || !uploaded.url) throw new Error(uploaded.error || 'Falha ao enviar a logomarca.');
         const updated = {
           ...siteState,
-          logo: { ...siteState.logo, src: optimized },
+          logo: { ...siteState.logo, src: uploaded.url },
         };
         setSiteState(updated);
         saveStoredSiteConfig(updated);
@@ -139,9 +141,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           maxHeight: 1280,
           quality: 0.82,
         });
+        const uploaded = await uploadSiteImage(new File([await (await fetch(optimized)).blob()], file.name, { type: file.type }));
+        if (!uploaded.ok || !uploaded.url) throw new Error(uploaded.error || 'Falha ao enviar a foto da fachada.');
         const updated = {
           ...siteState,
-          fachada: { ...siteState.fachada, src: optimized },
+          fachada: { ...siteState.fachada, src: uploaded.url },
         };
         setSiteState(updated);
         saveStoredSiteConfig(updated);

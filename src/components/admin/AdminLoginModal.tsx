@@ -14,11 +14,7 @@ import {
   Eye,
   EyeOff,
 } from 'lucide-react';
-import {
-  verifyAdminLogin,
-  resetAdminPasswordWithPin,
-  setAdminAuthenticatedSession,
-} from '../../utils/siteContentStorage';
+import { sendPasswordReset, signInAdmin, updatePassword } from '../../utils/adminAuth';
 
 interface AdminLoginModalProps {
   isOpen: boolean;
@@ -49,7 +45,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
 
@@ -58,42 +54,40 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
       return;
     }
 
-    const isValid = verifyAdminLogin(email, password);
-    if (isValid) {
-      setAdminAuthenticatedSession(true);
+    const result = await signInAdmin(email, password);
+    if (!result.error) {
       onLoginSuccess();
       onClose();
     } else {
-      setLoginError('E-mail ou senha incorretos. Verifique suas credenciais.');
+      setLoginError(result.error);
     }
   };
 
-  const handleForgotSubmit = (e: React.FormEvent) => {
+  const handleForgotSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setForgotError('');
     setForgotSuccess('');
 
-    if (!recoveryEmail.trim() || !recoveryPin.trim() || !newPassword) {
-      setForgotError('Preencha todos os campos obrigatórios.');
+    if (!recoveryEmail.trim()) {
+      setForgotError('Informe seu e-mail de administrador.');
       return;
     }
 
-    if (newPassword !== confirmPassword) {
+    if (newPassword && newPassword !== confirmPassword) {
       setForgotError('As senhas digitadas não coincidem.');
       return;
     }
 
-    const res = resetAdminPasswordWithPin(recoveryEmail, recoveryPin, newPassword);
-    if (res.success) {
-      setForgotSuccess(res.message);
+    const result = newPassword ? await updatePassword(newPassword) : await sendPasswordReset(recoveryEmail);
+    if (!result.error) {
+      setForgotSuccess(newPassword ? 'Senha redefinida com sucesso.' : 'Enviamos um link seguro para redefinir sua senha.');
       setTimeout(() => {
         setEmail(recoveryEmail);
-        setPassword(newPassword);
         setActiveView('login');
         setForgotSuccess('');
       }, 2000);
     } else {
-      setForgotError(res.message);
+      setForgotError(result.error);
     }
   };
 

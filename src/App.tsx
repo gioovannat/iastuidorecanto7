@@ -12,20 +12,13 @@ import { AdminLoginModal } from './components/admin/AdminLoginModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { SiteConfig } from './types';
 import { Lock, ShieldCheck } from 'lucide-react';
-import {
-  getStoredSiteConfig,
-  isUserAdminAuthenticated,
-  setAdminAuthenticatedSession,
-  loadFromIndexedDB,
-  saveToIndexedDB,
-} from './utils/siteContentStorage';
-import { loadPublishedSiteConfig } from './utils/siteContentSync';
+import { getStoredSiteConfig, loadFromIndexedDB, saveToIndexedDB } from './utils/siteContentStorage';
+import { loadPublishedSiteConfig, subscribeToSiteConfig } from './utils/siteContentSync';
+import { getAdminSession, signOutAdmin } from './utils/adminAuth';
 
 export default function App() {
   const [siteConfig, setSiteConfig] = useState<SiteConfig>(() => getStoredSiteConfig());
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() =>
-    isUserAdminAuthenticated()
-  );
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [currentView, setCurrentView] = useState<'site' | 'admin'>('site');
   const [isAdminLoginModalOpen, setIsAdminLoginModalOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
@@ -56,6 +49,7 @@ export default function App() {
 
     window.addEventListener('recanto7_content_updated', handleContentUpdate);
     window.addEventListener('recanto7_admin_auth_changed', handleAuthChange);
+    void getAdminSession().then(setIsAdminAuthenticated);
 
     // O cache local melhora o primeiro paint, mas a publicação remota sempre vence.
     // A ordem sequencial evita uma resposta tardia do IndexedDB sobrescrever o banco.
@@ -73,6 +67,7 @@ export default function App() {
       .catch(() => loadPublishedSiteConfig().then((publishedConfig) => {
         if (publishedConfig) setSiteConfig(publishedConfig);
       }).catch(() => {}));
+    const unsubscribe = subscribeToSiteConfig((publishedConfig) => { setSiteConfig(publishedConfig); void saveToIndexedDB(publishedConfig); });
 
     // Private Admin Router: detects #admin or /admin access
     const checkAdminRoute = () => {
@@ -88,7 +83,7 @@ export default function App() {
         search.includes('admin');
 
       if (isAdminRoute) {
-        if (isUserAdminAuthenticated()) {
+        if (isAdminAuthenticated) {
           setIsAdminAuthenticated(true);
           setCurrentView('admin');
           setIsAdminLoginModalOpen(false);
@@ -122,8 +117,9 @@ export default function App() {
       window.removeEventListener('hashchange', checkAdminRoute);
       window.removeEventListener('popstate', checkAdminRoute);
       window.removeEventListener('keydown', handleKeyDown);
+      unsubscribe();
     };
-  }, []);
+  }, [isAdminAuthenticated]);
 
   const handleLoginSuccess = () => {
     setIsAdminAuthenticated(true);
@@ -143,7 +139,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    setAdminAuthenticatedSession(false);
+    void signOutAdmin();
     setIsAdminAuthenticated(false);
     setCurrentView('site');
     setIsAdminLoginModalOpen(false);
